@@ -56,18 +56,24 @@ export async function POST(req: Request) {
 
       if (res.ok) {
         const user = data?.user ?? data?.session?.user ?? null;
-        // Якщо session не видана одразу (стандартний випадок з email-verification) —
-        // відповідаємо що треба ввести OTP
-        if (!user?.id) {
+        const emailVerified =
+          user?.emailVerified === true || Boolean(user?.email_confirmed_at);
+
+        // Якщо session не видана АБО email ще не підтверджений —
+        // відправляємо мобілку на OTP-екран. Source of truth — тут.
+        if (!user?.id || !emailVerified) {
           return NextResponse.json({ needsVerification: true, email });
         }
+
+        // Email уже підтверджений (рідкий випадок — OAuth-провайдер) —
+        // одразу видаємо token+user
         return NextResponse.json({
           token: String(user.id),
           user: {
             id: String(user.id),
             email: String(user.email ?? email),
             name: user.name ?? user.full_name,
-            emailVerified: user.emailVerified === true,
+            emailVerified: true,
           },
         });
       }

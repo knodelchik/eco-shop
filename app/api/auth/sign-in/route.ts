@@ -66,20 +66,37 @@ export async function POST(req: Request) {
             { status: 500 }
           );
         }
+        const emailVerified =
+          user.emailVerified === true || Boolean(user.email_confirmed_at);
+        if (!emailVerified) {
+          return NextResponse.json(
+            { needsVerification: true, email: String(user.email ?? email) },
+            { status: 200 }
+          );
+        }
         return NextResponse.json({
           token: String(user.id),
           user: {
             id: String(user.id),
             email: String(user.email ?? email),
             name: user.name ?? user.full_name ?? user.user_metadata?.full_name,
-            emailVerified: user.emailVerified === true || Boolean(user.email_confirmed_at),
+            emailVerified: true,
           },
         });
       }
 
       if (res.status !== 404) {
+        const errMsg = String(data?.message ?? '');
+        // Better Auth повертає 401/403 з "email not verified" — це не помилка,
+        // а сигнал перейти на OTP-екран
+        if (/verif|confirm/i.test(errMsg)) {
+          return NextResponse.json(
+            { needsVerification: true, email },
+            { status: 200 }
+          );
+        }
         return NextResponse.json(
-          { error: data?.message || 'Невірний email або пароль' },
+          { error: errMsg || 'Невірний email або пароль' },
           { status: res.status }
         );
       }
