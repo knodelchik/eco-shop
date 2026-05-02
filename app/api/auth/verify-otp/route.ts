@@ -8,7 +8,9 @@ import { NextResponse } from 'next/server';
  */
 export async function POST(req: Request) {
   try {
-    const { email, otp } = await req.json();
+    const body = await req.json();
+    const email = body?.email;
+    const otp = body?.otp ?? body?.code; // мобілка шле `code`, веб — `otp`
     if (!email || !otp) {
       return NextResponse.json({ error: 'email і otp обовʼязкові' }, { status: 400 });
     }
@@ -40,7 +42,22 @@ export async function POST(req: Request) {
       const data = await res.json().catch(() => ({}));
 
       if (res.ok) {
-        return NextResponse.json({ success: true, data });
+        // Витягуємо user з відповіді (формат у Better Auth варіюється)
+        const user = data?.user ?? data?.session?.user ?? null;
+        const token = user?.id ?? null;
+        return NextResponse.json({
+          success: true,
+          token,
+          user: user
+            ? {
+                id: String(user.id),
+                email: String(user.email ?? email),
+                name: user.name ?? user.full_name ?? user.user_metadata?.full_name,
+                emailVerified: true,
+              }
+            : null,
+          data,
+        });
       }
 
       // 404 → пробуємо наступний URL; інші помилки → повертаємо
