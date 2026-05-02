@@ -56,6 +56,31 @@ const nextConfig = {
       },
     ];
   },
+  /**
+   * CORS-заголовки для /api/* — потрібні щоб мобільний клієнт
+   * (eco-shop-mobile на Expo) міг звертатись до API з іншого origin.
+   * Браузерний веб-клієнт працює через cookies на тому ж origin
+   * і CORS йому не потрібен.
+   */
+  async headers() {
+    return [
+      {
+        source: '/api/:path*',
+        headers: [
+          { key: 'Access-Control-Allow-Origin', value: '*' },
+          {
+            key: 'Access-Control-Allow-Methods',
+            value: 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
+          },
+          {
+            key: 'Access-Control-Allow-Headers',
+            value: 'Content-Type, Authorization, X-Requested-With',
+          },
+          { key: 'Access-Control-Max-Age', value: '86400' },
+        ],
+      },
+    ];
+  },
 };
 
 export default withNextIntl(nextConfig);

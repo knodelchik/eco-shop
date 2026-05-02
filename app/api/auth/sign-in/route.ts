@@ -1,16 +1,13 @@
 /**
  * POST /api/auth/sign-in   { email, password }
  *
- * Mobile-friendly proxy для Neon Auth signInWithPassword.
- * Повертає { token, user } — мобілка збереже token у SecureStore
- * і слатиме його у Authorization: Bearer header.
+ * Mobile-friendly proxy для Neon Auth (Better Auth) email-password sign-in.
+ * Робить direct fetch на Neon Auth REST API з ЯВНИМ Origin-хедером —
+ * інакше Better Auth кидає "missing or null origin".
  *
- * У продакшні token = id юзера (для soft-auth з auth-guard.ts).
- * Це working approach для курсової — у production-grade застосунку треба
- * генерувати справжній JWT і валідувати його server-side.
+ * Повертає { token, user } для мобільного клієнта.
  */
 import { NextResponse } from 'next/server';
-import { neonAuth } from '@/lib/neon-auth';
 
 export async function POST(req: Request) {
   try {
@@ -25,32 +22,77 @@ export async function POST(req: Request) {
       );
     }
 
-    const { data, error } = await neonAuth.signInWithPassword({ email, password });
-
-    if (error) {
-      const msg =
-        typeof error === 'object' && error && 'message' in error
-          ? String((error as { message: unknown }).message)
-          : 'Login failed';
-      return NextResponse.json({ error: msg }, { status: 401 });
+    const baseUrl = (process.env.NEXT_PUBLIC_NEON_AUTH_URL ?? '').replace(/\/$/, '');
+    if (!baseUrl) {
+      return NextResponse.json(
+        { error: 'NEXT_PUBLIC_NEON_AUTH_URL не налаштовано' },
+        { status: 500 }
+      );
     }
 
-    const d = (data ?? {}) as {
-      user?: { id?: string; email?: string; name?: string; user_metadata?: { full_name?: string } };
-    };
+    // Origin для Better Auth — наш власний домен. Беремо з Vercel-env або з headers.
+    const origin =
+      process.env.NEXT_PUBLIC_BASE_URL ??
+      req.headers.get('origin') ??
+      `https://${req.headers.get('host')}`;
 
-    if (!d.user?.id) {
-      return NextResponse.json({ error: 'Не вдалося отримати користувача' }, { status: 500 });
+    // Better Auth може мати ендпоінт або без префіксу, або з /api/auth.
+    // Пробуємо обидва варіанти.
+    const candidates = [
+      `${baseUrl}/sign-in/email`,
+      `${baseUrl}/api/auth/sign-in/email`,
+    ];
+
+    let lastErr: { status: number; body: unknown } | null = null;
+
+    for (const url of candidates) {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Origin: origin,
+          Referer: origin,
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (res.ok) {
+        const user = data?.user ?? data?.session?.user ?? null;
+        if (!user?.id) {
+          return NextResponse.json(
+            { error: 'Не вдалося отримати користувача' },
+            { status: 500 }
+          );
+        }
+        return NextResponse.json({
+          token: String(user.id),
+          user: {
+            id: String(user.id),
+            email: String(user.email ?? email),
+            name: user.name ?? user.full_name ?? user.user_metadata?.full_name,
+            emailVerified: user.emailVerified === true || Boolean(user.email_confirmed_at),
+          },
+        });
+      }
+
+      if (res.status !== 404) {
+        return NextResponse.json(
+          { error: data?.message || 'Невірний email або пароль' },
+          { status: res.status }
+        );
+      }
+      lastErr = { status: res.status, body: data };
     }
 
-    return NextResponse.json({
-      token: d.user.id, // soft-auth token = userId
-      user: {
-        id: d.user.id,
-        email: d.user.email ?? email,
-        name: d.user.name ?? d.user.user_metadata?.full_name,
+    return NextResponse.json(
+      {
+        error: 'Не знайдено sign-in endpoint у Neon Auth',
+        debug: lastErr,
       },
-    });
+      { status: 502 }
+    );
   } catch (e) {
     console.error('POST /api/auth/sign-in failed:', e);
     return NextResponse.json({ error: 'Internal error' }, { status: 500 });
