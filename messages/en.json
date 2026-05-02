@@ -1,0 +1,1511 @@
+{
+  "Main": {
+    "heroTitle": "Welcome to EcoShop",
+    "heroSubtitle": "Discover natural, biodegradable and reusable goods for conscious living.",
+    "shop": "Shop",
+    "about": "Blog"
+  },
+  "Info": {
+    "infoTitle": "What is EcoShop?",
+    "sectionWhatIs": "Everything you need to know about conscious shopping.",
+    "refundPolicyTitle": "Refund Policy",
+    "refundPolicyText": "Your satisfaction is our top priority. We guarantee easy returns within 30 days as long as the item is new and unused.",
+    "buyerProtectionTitle": "Quality Guarantee",
+    "buyerProtectionText": "All EcoShop products are certified and come with a quality guarantee. Reach out to our support team for any questions.",
+    "shippingTitle": "Eco-friendly Shipping",
+    "shippingText": "Shipping from Ukraine with a minimal carbon footprint — only in plastic-free craft packaging. Dispatched the same day (excluding weekends / holidays).",
+    "needHelpTitle": "Need help?",
+    "needHelpText": "We work 24/7 to answer all your questions. Drop us a line any time and get a quick reply from our support team."
+  },
+  "CardCarousel": {
+    "titleGrindingStones": "Eco Cosmetics",
+    "descGrindingStones": "Natural cosmetics and personal care made from organic ingredients.",
+    "titleSharpeners": "Reusable Tableware",
+    "descSharpeners": "Bamboo, glass and metal tableware for home, kitchen and travel.",
+    "titleAccessories": "Zero-waste Accessories",
+    "descAccessories": "Reusable brushes, bags, containers and other waste-free essentials.",
+    "viewCategory": "View {title}"
+  },
+  "Product": {
+    "productComparisonTitle": "Product Comparison",
+    "model": "Model",
+    "sharpeningAngle": "Material",
+    "bodyMaterial": "Certification",
+    "knifeFixation": "Biodegradability",
+    "kit": "Set",
+    "price": "Price",
+    "productComparison": "Compare Products",
+    "products": [
+      {
+        "id": 1,
+        "name": "Bamboo Toothbrush",
+        "features": [
+          {
+            "name": "Material",
+            "value": "Bamboo + BPA-free bristles"
+          },
+          {
+            "name": "Certification",
+            "value": "FSC, Vegan"
+          },
+          {
+            "name": "Biodegradability",
+            "value": "100% compostable"
+          },
+          {
+            "name": "Set",
+            "value": "4 pcs in craft pack"
+          },
+          {
+            "name": "Price",
+            "value": "$8"
+          }
+        ]
+      },
+      {
+        "id": 2,
+        "name": "Glass Water Bottle 750 ml",
+        "features": [
+          {
+            "name": "Material",
+            "value": "Borosilicate glass + bamboo"
+          },
+          {
+            "name": "Certification",
+            "value": "BPA-free, LFGB"
+          },
+          {
+            "name": "Biodegradability",
+            "value": "Reusable, 5+ years"
+          },
+          {
+            "name": "Set",
+            "value": "Sleeve + lid"
+          },
+          {
+            "name": "Price",
+            "value": "$22"
+          }
+        ]
+      },
+      {
+        "id": 3,
+        "name": "Reusable Cotton Pads (10 pcs)",
+        "features": [
+          {
+            "name": "Material",
+            "value": "Organic cotton + bamboo"
+          },
+          {
+            "name": "Certification",
+            "value": "GOTS, OEKO-TEX"
+          },
+          {
+            "name": "Biodegradability",
+            "value": "100% natural"
+          },
+          {
+            "name": "Set",
+            "value": "10 pcs + laundry bag"
+          },
+          {
+            "name": "Price",
+            "value": "$12"
+          }
+        ]
+      },
+      {
+        "id": 4,
+        "name": "Solid Natural Soap Set",
+        "features": [
+          {
+            "name": "Material",
+            "value": "Oils, essential oils, SLS-free"
+          },
+          {
+            "name": "Certification",
+            "value": "COSMOS Organic"
+          },
+          {
+            "name": "Biodegradability",
+            "value": "Plastic-free"
+          },
+          {
+            "name": "Set",
+            "value": "3 bars × 100 g"
+          },
+          {
+            "name": "Price",
+            "value": "$18"
+          }
+        ]
+      }
+    ]
+  },
+  "Assembly": {
+    "assemblyTitle": "Device Assembly",
+    "assemblyText": "A simple assembly process shown in the video that takes only a few minutes. All necessary parts and tools are included in the EcoShop kit.",
+    "assemblySteps": [
+      {
+        "title": "Simple Assembly",
+        "desc": "Takes 5-10 minutes"
+      },
+      {
+        "title": "Clear Instructions",
+        "desc": "Step-by-step guide"
+      },
+      {
+        "title": "Precise Adjustment",
+        "desc": "Perfect angle setup"
+      },
+      {
+        "title": "Complete Kit",
+        "desc": "All components included"
+      }
+    ],
+    "assemblyButtonText": "Detailed Instructions",
+    "assemblyPdfText": "PDF ↓"
+  },
+  "Reviews": {
+    "reviewsTitle": "Trusted by over 500 satisfied customers worldwide",
+    "reviewsSubtitle": "Here is what some of them say about EcoShop",
+    "showMoreReviews": "Show more reviews",
+    "showLessReviews": "Show less",
+    "reviewers": [
+      {
+        "name": "Alisa Johnson",
+        "role": "Product Manager",
+        "text": "EcoShop completely changed the way our team collaborates. Highly recommend!"
+      },
+      {
+        "name": "Michael Smith",
+        "role": "Entrepreneur",
+        "text": "I love the clean design and smooth operation. Definitely worth the price!"
+      },
+      {
+        "name": "Sophie Lee",
+        "role": "Designer",
+        "text": "The attention to detail is impressive. It significantly simplified my work."
+      },
+      {
+        "name": "Daniel Carter",
+        "role": "Developer",
+        "text": "Finally, a solution that just works. Fast, reliable, and convenient."
+      },
+      {
+        "name": "Emma Wilson",
+        "role": "Marketing Specialist",
+        "text": "Our clients noticed the improvement right away. This is a real game changer."
+      },
+      {
+        "name": "James Brown",
+        "role": "CEO",
+        "text": "Best investment this year. The team support is also fantastic!"
+      },
+      {
+        "name": "Olivia Martinez",
+        "role": "Content Creator",
+        "text": "It streamlined my process and saved hours every week."
+      },
+      {
+        "name": "William Taylor",
+        "role": "Consultant",
+        "text": "Professional, clean, and intuitive. Nothing more is needed."
+      },
+      {
+        "name": "Isabella Lopez",
+        "role": "Freelancer",
+        "text": "The tool finally meets my expectations. Smooth and polished."
+      },
+      {
+        "name": "Henry Evans",
+        "role": "Startup Founder",
+        "text": "Our team’s productivity soared after switching to EcoShop."
+      },
+      {
+        "name": "Grace Kim",
+        "role": "Engineer",
+        "text": "It feels natural to use, and everything just works."
+      },
+      {
+        "name": "Ethan Davis",
+        "role": "Manager",
+        "text": "The reliability is unmatched. A must-have for serious work."
+      }
+    ]
+  },
+  "Footer": {
+    "footerHome": "Home",
+    "footerOurProducts": "Our Products",
+    "footerInformation": "Information",
+    "footerComparison": "Comparison",
+    "footerAssembly": "Assembly",
+    "footerReviews": "Reviews",
+    "footerShop": "Shop",
+    "footerKnifeSharpeners": "Eco Cosmetics",
+    "footerWhetstones": "Reusable Tableware",
+    "footerAccessories": "Accessories",
+    "footerAboutUs": "Blog",
+    "footerOurBackground": "Our Background",
+    "footerOurValues": "Our Values",
+    "footerManufacturing": "Manufacturing",
+    "footerSharperensKnowledge": "More about eco goods",
+    "footerStonesKnowledge": "More about stones",
+    "footerAccessoriessKnowledge": "More about accessories",
+    "footerDeliveryPolicy": "Delivery Policy",
+    "footerDeliveryCostCalculator": "Delivery Cost Calculator",
+    "footerContacts": "Contacts",
+    "footerWriteUs": "Write to us",
+    "footerSocialNetworks": "Social Networks",
+    "footerNewsletterTitle": "Newsletter Subscription",
+    "footerNewsletterDesc": "Stay up to date with new releases and features",
+    "footerEmailLabel": "Email",
+    "footerSubscribeButton": "Subscribe",
+    "subscribeSuccess": "Successfully subscribed!",
+    "subscribeError": "Something went wrong",
+    "subscribeLoginRequired": "Please log in to subscribe.",
+    "subscribeAlreadySubscribed": "You are already subscribed.",
+    "footerSupport": "Support",
+    "footerDelivery": "Shipping",
+    "footerRights": "Coursework",
+    "subscribeTitle": "Newsletter",
+    "subscribePlaceholder": "email@example.com",
+    "tagline": "Natural products for everyday conscious living.",
+    "subscribeDescription": "Once a month — new products and eco guides."
+  },
+  "Theme": {
+    "themeLight": "Light theme",
+    "themeSystem": "System theme",
+    "themeDark": "Dark theme"
+  },
+  "Settings": {
+    "ariaLabelSettings": "Settings",
+    "languageTitle": "Language",
+    "languageUA": "Ukrainian",
+    "languageEN": "English",
+    "currencyTitle": "Currency",
+    "currencyUAH": "₴ Hryvnia",
+    "currencyUSD": "$ Dollar",
+    "currencyEUR": "€ Euro",
+    "themeTitle": "Theme",
+    "themeLight": "Light",
+    "themeDark": "Dark",
+    "themeSystem": "System"
+  },
+  "UserDropdown": {
+    "myAccount": "My Account",
+    "profile": "Profile",
+    "signOut": "Sign Out",
+    "account": "Account",
+    "signIn": "Sign In",
+    "signUp": "Sign Up"
+  },
+  "Wishlist": {
+    "title": "Wishlist",
+    "empty": "Wishlist is empty",
+    "emptyDescription": "Add items you like",
+    "continueShopping": "Go to shop",
+    "addToCart": "Add to cart",
+    "remove": "Remove",
+    "addingToCart": "Adding to cart...",
+    "loading": "Loading...",
+    "outOfStockError": "Item is out of stock",
+    "addedToCartSuccess": "{title} added to cart",
+    "addToCartError": "Error (possibly insufficient stock)",
+    "removedMessage": "Removed from wishlist",
+    "outOfStockBadge": "SOLD",
+    "limitReached": "Cannot add. Limit reached ({max} pcs)"
+  },
+  "WishlistSheet": {
+    "title": "Wishlist",
+    "emptyMessage": "Add products here — and find them later.",
+    "goToShop": "Go to shop",
+    "addToCart": "Add to cart",
+    "added": "Added",
+    "loading": "Loading...",
+    "totalItems": "Total items",
+    "continueShopping": "Continue shopping",
+    "priceUnit": "$",
+    "placeholderAlt": "Product image",
+    "soldOut": "Sold Out",
+    "emptyTitle": "Wishlist is empty",
+    "goToShopButton": "Go to shop"
+  },
+  "BurgerMenu": {
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "menu": "Menu",
+    "user": {
+      "defaultName": "User"
+    },
+    "sections": {
+      "navigation": "Navigation",
+      "quickAccess": "Quick Access",
+      "settings": "Settings",
+      "account": "Account"
+    },
+    "navigation": {
+      "home": "Home",
+      "shop": "Shop",
+      "about": "Blog",
+      "contact": "Contact"
+    },
+    "quickAccess": {
+      "wishlist": "Wishlist",
+      "cart": "Cart"
+    },
+    "settings": {
+      "theme": {
+        "label": "Theme",
+        "light": "Light",
+        "system": "System",
+        "dark": "Dark"
+      },
+      "language": {
+        "label": "Language"
+      },
+      "currency": {
+        "label": "Currency"
+      }
+    },
+    "account": {
+      "profile": "My Profile",
+      "signOut": "Sign Out",
+      "signIn": "Sign In",
+      "signUp": "Sign Up"
+    },
+    "footer": {
+      "copyright": "EcoShop. All rights reserved."
+    }
+  },
+  "Shop": {
+    "loadingProducts": "Loading products...",
+    "noProductsFound": "No products found in this category",
+    "viewAllProducts": "View All Products",
+    "heroTitle": "EcoShop Shop",
+    "heroSubtitle": "Pick an eco product from our range: cosmetics, tableware, household chemicals and accessories",
+    "sharpeners": "Eco Cosmetics",
+    "stones": "Reusable Tableware",
+    "grindingStones": "Reusable Tableware",
+    "knifeSharpeners": "Eco Cosmetics",
+    "accessories": "Accessories",
+    "allProducts": "All Products",
+    "priceUnit": "$",
+    "placeholderImageAlt": "Placeholder product image",
+    "label": "Shop",
+    "title": "All products",
+    "searchPlaceholder": "Search products...",
+    "emptyTitle": "Nothing found",
+    "emptyDescription": "Try changing filters or search query.",
+    "filtersTitle": "Filters",
+    "sortNewest": "Newest",
+    "sortPriceAsc": "Price: low to high",
+    "sortPriceDesc": "Price: high to low",
+    "sortPopular": "Popular"
+  },
+  "ProductPage": {
+    "loading": "Loading...",
+    "errorLoading": "Error loading product",
+    "notFound": "Product not found",
+    "backToShop": "Back to shop",
+    "backToShopButton": "← Back to shop",
+    "quantityLabel": "Quantity:",
+    "addToCart": "Add to Cart",
+    "addToCartSuccess": "Product added to cart",
+    "addToWishlist": "Add to Wishlist",
+    "categoryLabel": "Category:",
+    "imageAltPrefix": "Image",
+    "backToCheckout": "← Back to checkout",
+    "stockLimitError": "Sorry, only {max} items available.",
+    "outOfStockLabel": "Out of Stock",
+    "thumbnailAlt": "Thumbnail",
+    "statusOutOfStock": "Out of Stock",
+    "statusInStock": "In stock: {count} pcs",
+    "maxQuantityError": "Maximum {max} items",
+    "soldOut": "Sold Out",
+    "tabDescription": "Description",
+    "tabComposition": "Composition",
+    "tabShipping": "Shipping",
+    "tabEco": "Eco impact",
+    "compositionMaterial": "Material",
+    "compositionCert": "Certification",
+    "compositionCountry": "Country of origin",
+    "compositionBio": "Biodegradable",
+    "shippingStandard": "Standard delivery in Ukraine — $5, up to 3 business days.",
+    "shippingExpress": "Express — $10, next day in Kyiv.",
+    "shippingPackaging": "Orders ship only in plastic-free craft packaging.",
+    "ecoCarbonFootprint": "Carbon footprint",
+    "ecoLow": "Low",
+    "ecoPackaging": "Packaging",
+    "ecoPackagingValue": "Craft paper, plastic-free",
+    "ecoFooter": "All EcoShop products are verified against 4 criteria: material, biodegradability, supply chain, and durability.",
+    "relatedLabel": "Related",
+    "relatedTitle": "Customers also buy",
+    "relatedComing": "Recommendations will appear here soon.",
+    "fallbackDescription": "A quality eco-product that combines convenience with naturalness. Fits perfectly into daily routine and helps reduce carbon footprint.",
+    "perSet": "per set of 4",
+    "fallbackMaterial": "Natural components",
+    "fallbackCountry": "Ukraine",
+    "biodegradableYes": "100%",
+    "biodegradableNo": "No",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "Profile": {
+    "loading": "Loading...",
+    "title": "Profile",
+    "emailLabel": "Email",
+    "fullNameLabel": "Full Name:",
+    "phoneLabel": "Phone:",
+    "tabOrders": "Order History",
+    "tabAddresses": "Addresses",
+    "tabSecurity": "Security",
+    "saveButton": "Save Changes",
+    "savingButton": "Saving...",
+    "saveSuccess": "Profile updated!",
+    "passwordSaveSuccess": "Password changed successfully!",
+    "passwordErrorLength": "Password must be at least 6 characters.",
+    "passwordErrorMatch": "Passwords do not match.",
+    "newPasswordLabel": "New Password",
+    "confirmPasswordLabel": "Confirm New Password",
+    "updatePasswordButton": "Update Password",
+    "updatingPasswordButton": "Updating...",
+    "addAddressButton": "Add Address",
+    "noAddresses": "You have not added any addresses yet.",
+    "noOrders": "You have not placed any orders yet.",
+    "AddressForm": {
+      "title": "Add New Address",
+      "countryLabel": "Country *",
+      "selectCountryPlaceholder": "Select Country",
+      "stateLabel": "State / Region",
+      "selectRegionPlaceholder": "Select Region",
+      "noRegionsPlaceholder": "No regions available",
+      "cityLabel": "City *",
+      "postalCodeLabel": "Postal Code *",
+      "addressLine1Label": "Street Address *",
+      "addressLine1Placeholder": "123 Main St, Apt 4",
+      "addressLine2Label": "Additional Info (optional)",
+      "addressLine2Placeholder": "Building entrance, intercom code, etc.",
+      "phoneLabel": "Phone *",
+      "phonePlaceholder": "+1...",
+      "phoneHelperText": "We pre-filled this from your profile. You can change it for this address.",
+      "setDefaultLabel": "Set as default address",
+      "saveButton": "Save",
+      "cancelButton": "Cancel"
+    },
+    "AddressManager": {
+      "title": "Delivery Addresses",
+      "addButton": "Add Address",
+      "emptyStateTitle": "You haven’t added any addresses yet.",
+      "emptyStateDesc": "Add an address for faster checkout.",
+      "defaultBadge": "Default",
+      "setAsDefaultTooltip": "Set as default",
+      "deleteTooltip": "Delete",
+      "confirmDelete": "Are you sure you want to delete this address?",
+      "toasts": {
+        "addSuccess": "Address added successfully!",
+        "addError": "Error saving address",
+        "deleteSuccess": "Address deleted",
+        "deleteError": "Failed to delete address",
+        "setDefaultSuccess": "Default address changed"
+      }
+    },
+    "Security": {
+      "title": "Change Password",
+      "forgotPassword": "I don't remember my current password",
+      "confirmGlobalSignOut": "Are you sure? You will need to log in again on this device.",
+      "labels": {
+        "currentPassword": "Current Password",
+        "newPassword": "New Password",
+        "confirmPassword": "Confirm New Password"
+      },
+      "placeholders": {
+        "currentPassword": "Enter old password",
+        "newPassword": "Enter new password",
+        "confirmPassword": "Repeat new password"
+      },
+      "buttons": {
+        "update": "Update Password",
+        "updating": "Verifying and updating..."
+      },
+      "errors": {
+        "passwordLength": "New password must be at least 6 characters.",
+        "passwordMismatch": "Passwords do not match.",
+        "wrongCurrentPassword": "Incorrect current password",
+        "updateError": "Error occurred while changing password"
+      },
+      "success": {
+        "passwordChanged": "Password changed successfully!",
+        "resetEmailSent": "Recovery email sent to {email}",
+        "globalSignOut": "Logged out from all devices"
+      },
+      "dangerZone": {
+        "title": "Danger Zone",
+        "signOutTitle": "Sign out from all devices",
+        "signOutDesc": "This will end your session on all computers and phones where you are logged in.",
+        "signOutButton": "Sign out everywhere"
+      }
+    },
+    "Edit": {
+      "title": "My Profile",
+      "editButton": "Edit",
+      "emailLabel": "Email",
+      "fullNameLabel": "Full Name",
+      "phoneLabel": "Phone",
+      "statusConfirmed": "VERIFIED",
+      "statusUnconfirmed": "UNVERIFIED",
+      "unconfirmedWarning": "You cannot place orders without a verified email.",
+      "verifyEmailButton": "Verify Email",
+      "sending": "Sending...",
+      "verificationEmailSent": "Verification email sent to {email}",
+      "notSpecified": "Not specified",
+      "cantChange": "(cannot be changed)",
+      "notConfirmedBadge": "Not verified",
+      "fullNamePlaceholder": "Your full name",
+      "phonePlaceholder": "+1...",
+      "phoneHelper": "This number will be automatically suggested when adding new addresses.",
+      "saveButton": "Save",
+      "saving": "Saving...",
+      "cancelButton": "Cancel",
+      "saveSuccess": "Profile updated!",
+      "unexpectedError": "An unexpected error occurred"
+    },
+    "OrderHistory": {
+      "title": "Order History",
+      "loading": "Loading history...",
+      "emptyTitle": "History is empty",
+      "emptyDesc": "You haven't placed any orders yet.",
+      "orderNumber": "Order #",
+      "itemsHeader": "Items",
+      "quantityUnit": "pcs",
+      "deliveryAddress": "Delivery Address",
+      "payment": "Payment",
+      "deliverySuffix": "Delivery",
+      "freeShipping": "Free",
+      "trackingInfo": "Tracking Info",
+      "trackButton": "Track Order",
+      "defaultService": "Carrier",
+      "copied": "Copied to clipboard",
+      "copy": "Copy",
+      "status": {
+        "success": "Paid",
+        "paid": "Paid",
+        "completed": "Completed",
+        "shipped": "Shipped",
+        "pending": "Pending Payment",
+        "failure": "Payment Failed",
+        "cancelled": "Cancelled"
+      }
+    },
+    "label": "Personal account",
+    "greeting": "Hi"
+  },
+  "Order": {
+    "emptyCart": "Your cart is empty",
+    "title": "Checkout",
+    "totalLabel": "Total:",
+    "paymentMethodLabel": "Payment method:",
+    "payButton": "Pay",
+    "paymentError": "Payment creation error",
+    "priceUnit": "$",
+    "orderSummary": "Order Summary",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "freeShipping": "Free",
+    "securePayment": "Secure payment",
+    "yourOrder": "Your order",
+    "deliveryAddress": "Delivery address",
+    "addAddress": "Add address",
+    "addNewAddress": "Add new address",
+    "selectAddress": "Select address",
+    "shippingMethod": "Shipping method",
+    "standard": "Standard",
+    "standardDesc": "Standard delivery",
+    "express": "Express",
+    "expressDesc": "Fast delivery",
+    "na": "N/A",
+    "processing": "Processing...",
+    "errorAuth": "You are not authorized. Please sign in.",
+    "errorEmail": "You need to verify your email to place an order.",
+    "errorSelectAddress": "Select delivery address",
+    "errorAddressNotFound": "Error: selected address not found",
+    "errorDeliveryUnavailable": "This delivery type is unavailable for your region",
+    "errorPaymentLink": "Failed to get payment link",
+    "errorServer": "Server connection error",
+    "quantityLabel": "Quantity",
+    "paymentPromo": "Payment by card of any bank. <line><bold>Apple Pay</bold> and <bold>Google Pay</bold> available.</line>"
+  },
+  "OrderResult": {
+    "successTitle": "Thank you for your order!",
+    "errorTitle": "Payment Failed",
+    "successMessage": "Your payment was successfully processed. We have already started assembling your order.",
+    "errorMessage": "Unfortunately, an error occurred while processing the payment. Please try again or contact support.",
+    "goToOrders": "Go to Orders",
+    "tryAgain": "Try Again",
+    "continueShopping": "Continue Shopping"
+  },
+  "Auth": {
+    "forgotPasswordTitle": "Forgot Password?",
+    "forgotPasswordDesc": "Enter your email address and we will send you recovery instructions.",
+    "emailPlaceholder": "name@example.com",
+    "sendResetLink": "Send Reset Link",
+    "sending": "Sending...",
+    "backToSignIn": "Back to Sign In",
+    "resetLinkSent": "Link sent! Check your email.",
+    "errorPrefix": "Error: ",
+    "forgotPasswordLink": "Forgot password?",
+    "signupLabel": "Sign up",
+    "signinLabel": "Sign in",
+    "signupTitle": "Create an account",
+    "signinTitle": "Welcome back",
+    "signupSubtitle": "Save your favorites and track orders in one account.",
+    "signinSubtitle": "Enter your email and password to continue.",
+    "brandLabel": "Journal · 04 · 2026",
+    "brandQuote": "\"Conscious consumption is not asceticism. It is respect for the things already in your home.\"",
+    "brandQuoteAuthor": "— Lesya Kovalchuk, EcoShop Journal",
+    "brandFooter": "© 2026 EcoShop · Natural products for everyday life",
+    "verifyHint": "Didn't verify email?",
+    "verifyHintLink": "Enter verification code",
+    "verifyEnterEmailFirst": "Enter email above"
+  },
+  "UpdatePassword": {
+    "title": "New Password",
+    "description": "Please enter your new password below.",
+    "placeholder": "Enter new password",
+    "button": "Change Password",
+    "buttonLoading": "Saving...",
+    "success": "Password changed successfully!",
+    "error": "Error updating password"
+  },
+  "Cart": {
+    "title": "Cart",
+    "empty": {
+      "title": "Your cart is empty",
+      "description": "Looks like you haven't added anything yet.",
+      "button": "Start Shopping"
+    },
+    "total": "Total",
+    "checkout": "Checkout"
+  },
+  "CartSheet": {
+    "title": "Your Cart",
+    "emptyMessage": "Add some products — they will show up here.",
+    "goToShop": "Go to shop",
+    "totalLabel": "Total:",
+    "checkoutButton": "Checkout",
+    "priceUnit": "$",
+    "placeholderAlt": "Placeholder product image",
+    "continueShopping": "Continue shopping",
+    "addToCartLimit": "Sorry, only {limit} items available. (In your cart: {current})",
+    "updateLimit": "Maximum available: {max} pcs",
+    "maxStockReached": "All available stock is already in cart",
+    "subtotalLabel": "Subtotal",
+    "shippingLabel": "Shipping",
+    "shippingCalculated": "calculated next",
+    "continueShoppingButton": "Continue shopping",
+    "emptyTitle": "Cart is empty"
+  },
+  "Contacts": {
+    "contactTitle": "Contact Us",
+    "contactSubtitle": "Reach out to us for any questions or inquiries",
+    "connectTitle": "Let's Connect",
+    "connectDesc": "Reach out to us for any questions or inquiries",
+    "phoneTitle": "Phone",
+    "phoneValue": "+380 50 139 1539",
+    "emailTitle": "Email",
+    "emailValue": "andaysharp@gmail.com",
+    "hoursTitle": "Business Hours",
+    "hoursMonFri": "Round-the-clock service, 24/7",
+    "followUsTitle": "Follow Us",
+    "followUsDesc": "Join our community and stay updated",
+    "formTitle": "Send us a Message",
+    "formSubtitle": "Have questions? We'd love to hear from you",
+    "formNameLabel": "Name",
+    "formNamePlaceholder": "Your name",
+    "formEmailLabel": "Email",
+    "formEmailPlaceholder": "your@email.com",
+    "formSubjectLabel": "Subject",
+    "formSubjectPlaceholder": "What's this about?",
+    "formMessageLabel": "Message",
+    "formMessagePlaceholder": "Tell us more about your inquiry...",
+    "formSubmit": "Send Message",
+    "formSubmitting": "Sending...",
+    "fillAllFields": "Please fill in all fields",
+    "invalidEmail": "Please enter a valid email",
+    "nameTooShort": "Name is too short",
+    "subjectTooShort": "Subject is too short",
+    "messageTooShort": "Message must be at least 10 characters",
+    "formSubmitSuccess": "Message sent! We'll be in touch.",
+    "label": "Contacts",
+    "titleFirst": "Write to us —",
+    "titleSecond": "we're always reachable",
+    "subtitle": "Questions about products, partnership ideas, or just want to share your impressions — we listen. We reply within 24 hours on business days.",
+    "howToContact": "How to reach us",
+    "locationTitle": "Location",
+    "locationCity": "Kyiv, Ukraine",
+    "locationDeliveryHint": "Shipping nationwide",
+    "privacyHint": "By clicking \"{cta}\", you agree to our",
+    "privacyLink": "privacy policy"
+  },
+  "AboutPage": {
+    "title": "About Us",
+    "subtitle": "Welcome to EcoShop — where precision meets innovation in eco-friendly solutions.",
+    "backgroundTitle": "Our Background",
+    "backgroundText1": "Founded in 2016, EcoShop was born from a simple observation: artists, craftsmen, and professionals deserve better tools to maintain their equipment. What started as a small workshop in Sumy has grown into a leading manufacturer of premium eco-friendly solutions used by professionals worldwide.",
+    "journeySubtitle": "The Journey",
+    "journeyText": "Our founder, a former industrial designer, noticed the frustration artists faced with generic eco products. He spent three years researching metallurgy, products geometry, and ergonomics to create the first EcoShop prototype. That prototype evolved into our flagship series of eco products, now trusted by thousands of professionals globally.",
+    "milestonesSubtitle": "Key Milestones",
+    "milestone2016": "Company founded in Sumy, Ukraine",
+    "milestone2017": "First EcoShop model released",
+    "milestone2018": "Expansion to international markets",
+    "milestone2021": "Sustainable manufacturing practices implemented",
+    "milestone2025": "Reached 5,000+ customers worldwide",
+    "valuesTitle": "Our Core Values",
+    "valuePrecisionTitle": "Precision",
+    "valuePrecisionText": "Every EcoShop product is engineered with micron-level accuracy. We believe true craftsmanship starts with the right tools, honed to perfection.",
+    "valueSustainabilityTitle": "Sustainability",
+    "valueSustainabilityText": "Our commitment to the environment drives us to use recycled materials and minimize waste in every step of our production.",
+    "valueInnovationTitle": "Innovation",
+    "valueInnovationText": "We constantly invest in R&D to develop cutting-edge eco-friendly technologies that make maintenance easier and more efficient.",
+    "valueCustomerFocusTitle": "Customer Focus",
+    "valueCustomerFocusText": "Your satisfaction is our priority. We offer 24/7 online support and a lifetime warranty on all our products.",
+    "manufacturingTitle": "Manufacturing",
+    "manufacturingText": "Our state-of-the-art facility in Sumy combines traditional craftsmanship with modern automation. Every eco products undergoes rigorous quality control before it reaches your hands.",
+    "productionProcessSubtitle": "Production Process",
+    "step1Title": "1. Material Selection",
+    "step1Text": "We source premium materials like tungsten carbide and ceramic from certified suppliers.",
+    "step2Title": "2. Precision Machining",
+    "step2Text": "CNC machines craft each component to exact specifications with 0.001mm tolerance.",
+    "step3Title": "3. Assembly",
+    "step3Text": "Skilled technicians hand-assemble every unit, ensuring perfect alignment and functionality.",
+    "step4Title": "4. Quality Testing",
+    "step4Text": "Each system undergoes over 50 quality checks, including products angle verification and durability testing.",
+    "step5Title": "5. Packaging",
+    "step5Text": "Products are packaged in eco-friendly materials with comprehensive user guides.",
+    "sustainabilitySubtitle": "Sustainability Initiatives",
+    "sustainabilityText": "Our factory runs on 100% renewable energy, and we have achieved zero-waste-to-landfill status since 2021. We use recycled aluminum for casings and biodegradable packaging materials.",
+    "servicesTitle": "EcoShop Services",
+    "servicesText": "Beyond manufacturing exceptional products, we offer comprehensive services to ensure you get the most out of your EcoShop eco products.",
+    "howToUseSubtitle": "How to Use Your EcoShop eco products",
+    "instructionsTitle": "Step-by-Step Instructions:",
+    "inst1Title": "1. Setup",
+    "inst1Text": "Place the eco products on a stable surface. Secure a clean, dry product on the holder at the desired angle.",
+    "inst2Title": "2. Coarse eco-friendly",
+    "inst2Text": "Start with the coarsest stone. Move the stone with light pressure back and forth along the entire cutting edge until a burr forms on the opposite side.",
+    "inst3Title": "3. Second Side",
+    "inst3Text": "Flip the product and repeat the process until a burr forms on this side of the products.",
+    "inst4Title": "4. Final Honing",
+    "inst4Text": "Progressively switch to finer grit stones, reducing the number of strokes to polish the edge.",
+    "inst5Title": "5. Deburring",
+    "inst5Text": "Secure the finest stone, maintain the angle. Move the product only in the direction of the spine (backward from the cutting edge) using minimal pressure, alternating sides (1-2 light passes each side) until the burr is removed.",
+    "proTipStrong": "Pro Tip: ",
+    "proTipText": "To achieve maximum sharpness, regularly check the edge for sharpness and evenness. For very thin products or filleting, use slightly less pressure during the finishing stages.",
+    "additionalServicesSubtitle": "Additional Services",
+    "serviceMaintenanceTitle": "Original Parts Supply",
+    "serviceMaintenanceText": "Guaranteed availability of original spare parts and replacement of any element (including spherical nuts or rotary mechanism parts).",
+    "serviceEngravingTitle": "Custom Engraving",
+    "serviceEngravingText": "Personalize your EcoShop with custom engraving for corporate gifts or personal use.",
+    "serviceWorkshopsTitle": "Knowledge Library",
+    "serviceWorkshopsText": "Access to an exclusive video library, instructions, and individual online consultations with a EcoShop eco-friendly master.",
+    "serviceBulkOrdersTitle": "Bulk Orders",
+    "serviceBulkOrdersText": "Special pricing and customization options for schools, studios, and corporations.",
+    "stayUpdatedTitle": "Stay Updated",
+    "stayUpdatedText": "Subscribe to our newsletter to receive updates on new events, product launches, and exclusive offers.",
+    "subscribeButton": "Subscribe Now",
+    "subscribeSuccess": "You have successfully subscribed!",
+    "subscribeError": "Subscription failed. Please try again.",
+    "subscribeLoginRequired": "Please log in to subscribe.",
+    "subscribeAlreadySubscribed": "You are already subscribed."
+  },
+  "AboutLayout": {
+    "sidebar": {
+      "premiumSharpeners": "Premium eco products",
+      "latestProduct": "Latest Product",
+      "onThisPage": "On this page",
+      "menu": "Menu"
+    },
+    "menu": {
+      "aboutUs": "About us",
+      "sharpeners": "eco products",
+      "grindingStones": "reusable goods",
+      "accessories": "Accessories",
+      "delivery": "Delivery"
+    },
+    "nav": {
+      "previous": "Previous",
+      "next": "Next",
+      "guide": "Contribution Guide",
+      "aboutUs": "Blog",
+      "sharpeners": "eco products",
+      "grindingStones": "reusable goods",
+      "accessories": "Accessories",
+      "delivery": "Delivery"
+    },
+    "sections": {
+      "background": "Our Background",
+      "values": "Our Values",
+      "manufacturing": "Manufacturing",
+      "services": "EcoShop Services",
+      "events": "Our Newsletter",
+      "model1": "EcoShop Model 1",
+      "digitalAngle": "EcoShop with digital angle Measurement",
+      "model2": "EcoShop Model 2",
+      "convexBlades": "EcoShop for Convex products",
+      "diamondStones": "Diamond Stones",
+      "oxideStones": "Aluminum Oxide Stones",
+      "stoneComparison": "Stone Comparison",
+      "stoneUsage": "How to Use",
+      "stoneCare": "Care & Maintenance",
+      "rotaryMechanism": "Rotary Mechanism",
+      "tableMount": "Table Mount",
+      "hingeRestHook": "Hinge with Rest Hook",
+      "clampFullFlat": "Clamp for Full Flat",
+      "adapterChisels": "Adapter for Chisels",
+      "adapterClamps": "Adapter for Clamps",
+      "hingeConvex": "Hinge for Convex",
+      "fineTuning": "Fine-Tuning Adapter",
+      "policy": "Delivery Policy",
+      "calculator": "Cost Calculator",
+      "returnsWarranty": "Returns, Exchanges, and Warranty"
+    },
+    "feedback": {
+      "title": "Was this helpful?",
+      "placeholder": "Your feedback...",
+      "supported": "supported",
+      "send": "Send",
+      "success": "Thank you for your feedback!",
+      "errorEmpty": "Please write your feedback",
+      "errorShort": "Feedback is too short"
+    }
+  },
+  "SharpenersPage": {
+    "hero": {
+      "title": "EcoShop eco products",
+      "subtitle": "Discover our full lineup of professional eco-friendly tools designed for precision, durability, and comfort. "
+    },
+    "model1": {
+      "title": "EcoShop Model 1",
+      "description": "Modular eco products with a rotary mechanism based on cutting-edge rotating clamp technology. Clamps are made of steel (not aluminum). All parts of the rotary mechanism are steel; rubbing surfaces hardened to 900HV. EcoShop system includes a spherical nut to compensate for screw skew on thin goods. Wear compensation is possible only in the EcoShop system. Antifriction bronze bushing in the hinge ensures smooth stone movement. Stone holder handle made of stained oak. Minimum grinding angle: 10° per side. Compatible with goods, scissors, and chisels. eco-friendly angles from 10° to 40° per side. Stones fixed from 12 mm width and up to 220 mm length. Compatible with both blank and standard stones. Rotary mechanism accuracy: 0.2°.",
+      "imageAlt": "EcoShop Model 1 - Classic eco products",
+      "feature1": "A spherical nut compensates for screw skew when working with thin goods.",
+      "feature2": "Steel parts of the rotary mechanism ensure durability.",
+      "feature3": "Compensation for wear of the turning mechanism is only available in the EcoShop system.",
+      "price": "$149.99"
+    },
+    "digital": {
+      "title": "EcoShop with Digital eco-friendly Angle Measurement",
+      "description": "EcoShop with integrated Digital eco-friendly Angle Measurement. This configuration avoids the installation of additional mass on the clamping frame and avoids additional pressure on the reusable goods. Combining modern technology with traditional engineering, this model includes a **built-in digital angle display** for precise eco-friendly every time. Perfect for professionals who demand accuracy.",
+      "imageAlt": "EcoShop Model with Digital angle measurement",
+      "feature1": "Digital LCD angle indicator (accuracy ±0.1°)",
+      "feature2": "Micro-USB rechargeable power system",
+      "feature3": "All model 1 features",
+      "price": "$89.99"
+    },
+    "model2": {
+      "title": "EcoShop Model 2",
+      "description": "Unlike Model1, it has an additional pair of clamps fixed in the center. All parts are made of steel, no aluminum. Friction surfaces are hardened to a hardness of 900HV. The clamps are equipped with a spherical nut to compensate for the misalignment of the screw when securing thin goods. Moreover, in the case of thread wear in the clamps, it is necessary to replace only the nut and screw, and not the entire expensive clamp. Parts are coated with a polymer wear-resistant coating that covers car wheels. There is a mechanism for adjusting the wear of the seats of the rotary mechanism. The guide is heat-treated to a hardness of 60HRC; for smoothness of movement, sliding is carried out along the bearing. The hinge has extended turning angles, which provides a comfortable eco-friendly of long goods. The stone holder has a substrate, which allows you to use stones with blank and without blank. The base is supported on 3 points, which ensures the stability of the eco products on any surface.",
+      "imageAlt": "EcoShop Model 2 - Professional eco products",
+      "feature1": "Reinforced ceramic eco-friendly wheel",
+      "feature2": "Adjustable eco-friendly resistance",
+      "feature3": "Silent operation mode",
+      "price": "$69.99"
+    },
+    "convex": {
+      "title": "EcoShop for Convex products",
+      "description": "1. Clamps are made of steel, not aluminum. 2. All parts of the rotary mechanism are also made of steel, and not of bronze and aluminum. Rubbing surfaces are hardened to hardness 740HV. 3. Only in the EcoShop system, the clamps have a spherical nut to compensate for the screw skew when attaching thin goods. 4. Only in the EcoShop system is it possible to compensate for the wear of the turning mechanism. 5. An antifriction bronze bushing is pressed into the hinge of the sliding assembly, which ensures an increased smoothness of the movement of the stone. 6. The handle of the stone holder is made of stained oak. 7. The minimum angle of grinding is 12 degrees per side.",
+      "imageAlt": "EcoShop Convex - Specialist eco products for convex products",
+      "feature1": "Dual-bevel correction system",
+      "feature2": "Supports edge angles 15°–45°",
+      "feature3": "Anti-glare surface with adjustable grip",
+      "proTipStrong": "Pro Tip:",
+      "proTipText": " For best convex eco-friendly, rotate the products gently while maintaining even pressure throughout the stroke.",
+      "price": "$79.99"
+    }
+  },
+  "GrindingStonesPage": {
+    "hero": {
+      "title": "reusable goods",
+      "subtitle": "Professional reusable goods for precision edge restoration. Choose between diamond-embedded bars for extreme durability or aluminum oxide stones for traditional eco-friendly excellence."
+    },
+    "diamond": {
+      "tag": "PREMIUM",
+      "title": "Diamond Stones",
+      "description": "Set of four precision-engineered diamond stones with monolayer metal bond. Diamonds evenly distributed throughout the volume ensure consistent eco-friendly performance and exceptional longevity.",
+      "specsTitle": "Technical Specifications",
+      "specTypeLabel": "Type",
+      "specTypeValue": "Monolayer metal bond with diamonds",
+      "specSizeLabel": "Size",
+      "specSizeValue": "150 × 25 × 3 mm",
+      "specMaterialLabel": "Material",
+      "specMaterialValue": "Copper-tin bond",
+      "specConcLabel": "Diamond Concentration",
+      "specConcValue": "100%",
+      "specToleranceLabel": "Tolerance",
+      "specToleranceValue": "±0.1 mm",
+      "imageAlt": "EcoShop Diamond Stones Set",
+      "feature1": "Ultra-durable diamond coating",
+      "feature2": "Suitable for carbide and hardened steel",
+      "feature3": "Ideal for industrial and precision use",
+      "price": "$84.99",
+      "priceNote": "Set of 4 stones"
+    },
+    "oxide": {
+      "tag": "TRADITIONAL",
+      "title": "Aluminum Oxide reusable goods",
+      "description": "Premium aluminum oxide stones designed for versatile eco-friendly applications. Four different grit levels provide everything from initial shaping to fine polishing.",
+      "specsTitle": "Technical Specifications",
+      "specSizeLabel": "Size",
+      "specSizeValue": "160mm × 25mm × 6mm",
+      "specMaterialLabel": "Material",
+      "specMaterialValue": "Aluminum oxide",
+      "specGritLabel": "Grit Options",
+      "specGritValue": "200 / 400 / 800 / 1500",
+      "specShapeLabel": "Shape",
+      "specShapeValue": "Rectangular bar",
+      "imageAlt": "EcoShop Aluminum Oxide reusable goods",
+      "feature1": "Four grit levels: 200 / 400 / 800 / 1500",
+      "feature2": "Water-based eco-friendly (soak before use)",
+      "feature3": "Ideal for kitchen goods and woodworking tools",
+      "price": "$36.99",
+      "priceNote": "Set of 4 stones included"
+    },
+    "comparison": {
+      "title": "Stone Comparison",
+      "feature": "Feature",
+      "diamondStonesTitle": "Diamond Stones",
+      "aluminumOxideTitle": "Aluminum Oxide",
+      "material": "Material",
+      "materialDiamond": "Diamond + Copper-tin bond",
+      "materialOxide": "Aluminum oxide",
+      "size": "Size (mm)",
+      "gritRange": "Grit Range",
+      "gritRangeDiamond": "Various (4 stones)",
+      "gritRangeOxide": "200 / 400 / 800 / 1500",
+      "durability": "Durability",
+      "durabilityDiamond": "Extreme",
+      "durabilityOxide": "High",
+      "bestFor": "Best For",
+      "bestForDiamond": "Industrial, carbide",
+      "bestForOxide": "General purpose",
+      "price": "Price"
+    },
+    "usageGuide": {
+      "title": "How to Use reusable goods",
+      "step1": {
+        "heading": "Prepare the Stone",
+        "text": "For aluminum oxide stones, soak in water for 10 minutes. Diamond stones can be used dry or with light oil."
+      },
+      "step2": {
+        "heading": "Set the Angle",
+        "text": "Maintain consistent angle: 15-20° for goods, 25-30° for tools."
+      },
+      "step3": {
+        "heading": "Start with Coarse Grit",
+        "text": "Begin with 200-400 grit to establish the edge."
+      },
+      "step4": {
+        "heading": "Progress Through Grits",
+        "text": "Move to finer grits: 400 → 800 → 1500 for polished edge."
+      },
+      "step5": {
+        "heading": "Use Smooth Strokes",
+        "text": "Apply even pressure along the entire products length."
+      },
+      "step6": {
+        "heading": "Clean & Store",
+        "text": "Rinse aluminum oxide stones, wipe diamond stones clean."
+      }
+    },
+    "care": {
+      "title": "Stone Care & Maintenance",
+      "diamondTitle": "Diamond Stones",
+      "diamond1": "Can be used dry or with light oil",
+      "diamond2": "Clean with soft brush and water",
+      "diamond3": "Do not require flattening",
+      "diamond4": "Store in protective case when not in use",
+      "oxideTitle": "Aluminum Oxide Stones",
+      "oxide1": "Soak in water before use (10 minutes)",
+      "oxide2": "Clean with water only, no soap",
+      "oxide3": "Flatten surface periodically with flattening stone",
+      "oxide4": "Dry completely before storing"
+    }
+  },
+  "DeliveryPage": {
+    "hero": {
+      "title": "Shipping & Delivery",
+      "subtitle": "Find estimated shipping costs and delivery times for your region. "
+    },
+    "policy": {
+      "title": "International Delivery Policy",
+      "intro": "EcoShop proudly ships worldwide. Due to varying logistics networks and local customs regulations, delivery costs and times are calculated dynamically based on the destination country, state/province, and chosen carrier.",
+      "keyTitle": "Key Information:",
+      "key1Strong": "Free Shipping",
+      "key1Text": "Standard delivery to Ukraine is FREE.",
+      "key2Strong": "Remote Area Surcharge",
+      "key2Text": "Applied to deliveries in remote or island locations. Select or type a remote region name to see the surcharge.",
+      "key3Strong": "Customs & Duties",
+      "key3Text": "Buyer is responsible for all import duties and taxes levied by the destination country."
+    },
+    "calculator": {
+      "title": "Delivery Cost Calculator",
+      "intro": "Use the search feature below to quickly find your country and preferred service.",
+      "labelCountry": "Select Country:",
+      "placeholderCountry": "Type country name...",
+      "labelState": "State / Remote Area (Optional):",
+      "placeholderStateUA": "Not applicable for Ukraine",
+      "placeholderStateDefault": "Select state or type a remote region",
+      "labelService": "Delivery Service:",
+      "surchargeNoteStrong": "NOTE",
+      "surchargeNoteText": "A $20 remote area surcharge has been applied to this price based on the region entered.",
+      "resultsTitle": "Estimated Options for {country}:",
+      "resultsLoading": "Calculating the best route...",
+      "resultsTime": "Time",
+      "resultsFree": "FREE",
+      "resultsNA": "N/A",
+      "resultsApproxPrice": "Approx. price",
+      "resultsNoOptions": "No specific shipping options are available for the selected criteria. Showing Rest of World options by default."
+    },
+    "options": {
+      "uaStandard": {
+        "name": "Standard (UkrPoshta)",
+        "time": "3-5 days"
+      },
+      "uaExpress": {
+        "name": "Express (Nova Poshta)",
+        "time": "1-2 days"
+      },
+      "deStandard": {
+        "name": "Standard (DHL/DPD)",
+        "time": "7-14 days"
+      },
+      "deExpress": {
+        "name": "Express (FedEx)",
+        "time": "3-5 days"
+      },
+      "frStandard": {
+        "name": "Standard (La Poste)",
+        "time": "8-15 days"
+      },
+      "frExpress": {
+        "name": "Express (DHL)",
+        "time": "3-5 days"
+      },
+      "uspsStandard": {
+        "name": "Standard (USPS)",
+        "time": "7-14 days"
+      },
+      "usExpress": {
+        "name": "Express (UPS)",
+        "time": "3-5 days"
+      },
+      "caStandard": {
+        "name": "Standard (Canada Post)",
+        "time": "10-18 days"
+      },
+      "caExpress": {
+        "name": "Express (FedEx)",
+        "time": "4-7 days"
+      },
+      "jpStandard": {
+        "name": "International Standard",
+        "time": "10-20 days"
+      },
+      "jpExpress": {
+        "name": "International Express",
+        "time": "5-8 days"
+      },
+      "brStandard": {
+        "name": "International Standard",
+        "time": "15-30 days"
+      },
+      "brExpress": {
+        "name": "International Express",
+        "time": "7-12 days"
+      },
+      "nzStandard": {
+        "name": "International Standard",
+        "time": "14-25 days"
+      },
+      "nzExpress": {
+        "name": "International Express",
+        "time": "7-10 days"
+      },
+      "auStandard": {
+        "name": "International Standard",
+        "time": "14-25 days"
+      },
+      "auExpress": {
+        "name": "International Express",
+        "time": "7-10 days"
+      },
+      "globalStandard": {
+        "name": "Global Standard",
+        "time": "10-30 days"
+      },
+      "globalExpress": {
+        "name": "Global Express",
+        "time": "5-15 days"
+      },
+      "ruUnavailable": {
+        "name": "We are sorry. putin is not dead yet",
+        "time": "N/A"
+      }
+    },
+    "service": {
+      "standard": "Standard",
+      "express": "Express"
+    },
+    "returns": {
+      "title": "Returns, Exchanges, and Warranty",
+      "intro": "We stand by the quality of EcoShop products. Review our policy regarding returns, exchanges, and warranty claims for items received via delivery.",
+      "returnTitle": "30-Day Returns",
+      "returnText": "You may return most new, unopened items within 30 days of delivery for a full refund. Items must be returned in their original packaging. Return shipping costs are borne by the customer, except in cases of damage.",
+      "warrantyTitle": "A Year Warranty",
+      "warrantyText": "All EcoShop eco products are covered by our one year manufacturing warranty against defects in materials and workmanship. This excludes normal wear and tear of consumable parts like reusable goods.",
+      "lostTitle": "Lost Shipment",
+      "lostText": "If your tracking information stalls for more than 15 business days, please contact our support team. We will file a claim with the carrier and ship a replacement unit if the package is confirmed lost."
+    }
+  },
+  "AccessoriesPage": {
+    "heroTitle": "Accessories",
+    "heroSubtitle": "Explore the detailed specifications and features of our professional accessories, designed to extend the versatility, precision, and performance of your EcoShop eco products.",
+    "itemPrice": "Price",
+    "itemFeaturesTitle": "Key Features",
+    "itemDetailsTitle": "Technical Specifications & Notes",
+    "accessoriesData": [
+      {
+        "id": "rotary-mechanism",
+        "name": "EcoShop Rotary Mechanism Model 1",
+        "price": 80,
+        "imageSrc": "https://umnwnrvuonyiwylxqoiq.supabase.co/storage/v1/object/sign/product%20images/rotarymechanism-1.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9mYTY2MjExZi1lZmNjLTQ0ZmMtOWY2Ni0xZDM5N2NhNGE3NzYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJwcm9kdWN0IGltYWdlcy9yb3RhcnltZWNoYW5pc20tMS5qcGciLCJpYXQiOjE3NjEzMzM5MjYsImV4cCI6MjA3NjY5MzkyNn0.As5HBUXaYP7_4WS0Ff1e6SQl6u5qC2yJB0uhCx54TO4",
+        "features": [
+          "Dual symmetrical fixed rotary positions for consistent setup.",
+          "Easy rotation despite a powerful spring, eliminating the need to pull the mechanism.",
+          "Adjusting nut to modify spring compression force.",
+          "All rubbing parts are hardened steel for maximum service life.",
+          "Wear-resistant polymer coating (similar to car wheels)."
+        ],
+        "details": [
+          "Rotary frame length: 200 mm.",
+          "Clamping jaws are heat-treated steel with an 8-degree slant per side.",
+          "Supports eco-friendly angles up to 12 degrees per side.",
+          "Spherical nut in clamps compensates for screw misalignment with thin goods.",
+          "Minimum products length for two clamps: ~80 mm."
+        ]
+      },
+      {
+        "id": "table-mount",
+        "name": "Table Mount",
+        "price": 16,
+        "imageSrc": "https://umnwnrvuonyiwylxqoiq.supabase.co/storage/v1/object/sign/product%20images/tablemount-1.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9mYTY2MjExZi1lZmNjLTQ0ZmMtOWY2Ni0xZDM5N2NhNGE3NzYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJwcm9kdWN0IGltYWdlcy90YWJsZW1vdW50LTEuanBnIiwiaWF0IjoxNzYxMzM0MDIxLCJleHAiOjIwNzY2OTQwMjF9.TtQ_GrgCh-ERn7Q2QXoEvYG6w04a55_0Q5fmV4bfQ8k",
+        "features": [
+          "Provides a stable and secure base for the eco products.",
+          "Designed to firmly clamp the EcoShop system to any horizontal surface."
+        ],
+        "details": [
+          "Ensures maximum rigidity and minimizes vibration during operation."
+        ]
+      },
+      {
+        "id": "hinge-rest-hook",
+        "name": "Hinge with Rest Hook",
+        "price": 10,
+        "imageSrc": "https://umnwnrvuonyiwylxqoiq.supabase.co/storage/v1/object/sign/product%20images/hinge-1.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9mYTY2MjExZi1lZmNjLTQ0ZmMtOWY2Ni0xZDM5N2NhNGE3NzYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJwcm9kdWN0IGltYWdlcy9oaW5nZS0xLmpwZyIsImlhdCI6MTc2MTMzMzQ3OSwiZXhwIjoyMDc2NjkzNDc5fQ.C4RRY-gc03uG8VDzMn0Y-wm38bhqQfkQTEsOAm94mE4",
+        "features": [
+          "Hole diameter: 8 mm.",
+          "Features a pressed-in sleeve made of anti-friction bronze."
+        ],
+        "details": [
+          "The bronze sleeve guarantees increased smoothness of movement, crucial for angle consistency."
+        ]
+      },
+      {
+        "id": "clamp-full-flat",
+        "name": "EcoShop Clamp for Full Flat",
+        "price": 23,
+        "imageSrc": "https://umnwnrvuonyiwylxqoiq.supabase.co/storage/v1/object/sign/product%20images/clamp-1.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9mYTY2MjExZi1lZmNjLTQ0ZmMtOWY2Ni0xZDM5N2NhNGE3NzYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJwcm9kdWN0IGltYWdlcy9jbGFtcC0xLmpwZyIsImlhdCI6MTc2MTMzMzM3MCwiZXhwIjoyMDc2NjkzMzcwfQ.ef5-ofFD4cr4vZG0CtW7HzSLcMDL5JjVo-PXSVFBuww",
+        "features": [
+          "Made of heat-treated spring steel for optimal strength and retention.",
+          "Specifically designed for securely fixing goods with a full flat grind."
+        ],
+        "details": [
+          "Ensures even pressure and prevents products damage.",
+          "Price listed is for 1 pc. A pair of clamps costs $46."
+        ]
+      },
+      {
+        "id": "adapter-flat-chisels",
+        "name": "Adapter for eco-friendly Flat Chisels",
+        "price": 13,
+        "imageSrc": "https://umnwnrvuonyiwylxqoiq.supabase.co/storage/v1/object/sign/product%20images/adaptersharp-1.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9mYTY2MjExZi1lZmNjLTQ0ZmMtOWY2Ni0xZDM5N2NhNGE3NzYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJwcm9kdWN0IGltYWdlcy9hZGFwdGVyc2hhcnAtMS5qcGciLCJpYXQiOjE3NjEzMzMyNzEsImV4cCI6MjA3NjY5MzI3MX0._dbe0CKZZxfjcoNyaAQ7FSzxTUzXtSdY03yAwvqHju8",
+        "features": [
+          "Expands the EcoShop system capability to include flat chisels.",
+          "Provides the necessary rigid and straight fixation for chiseled edges."
+        ],
+        "details": [
+          "Allows other items to be cared for with high precision."
+        ]
+      },
+      {
+        "id": "adapter-for-clamps",
+        "name": "Center Clamp Adapter",
+        "price": 10,
+        "imageSrc": "https://umnwnrvuonyiwylxqoiq.supabase.co/storage/v1/object/sign/product%20images/adapterclamps-1.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9mYTY2MjExZi1lZmNjLTQ0ZmMtOWY2Ni0xZDM5N2NhNGE3NzYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJwcm9kdWN0IGltYWdlcy9hZGFwdGVyY2xhbXBzLTEuanBnIiwiaWF0IjoxNzYxMzMzMjI5LCJleHAiOjIwNzY2OTMyMjl9.yx889QdZZdwzrWGGgqBjaz1yJivH12sahUEFTF-cBR0",
+        "features": [
+          "Enables closer positioning of clamps for eco-friendly short products.",
+          "Ensures a rigid fixing position even at minimal clamp spacing."
+        ],
+        "details": [
+          "Note: Adapter is sold without clamps."
+        ]
+      },
+      {
+        "id": "hinge-convex",
+        "name": "Hinge for Convex",
+        "price": 9,
+        "imageSrc": "https://umnwnrvuonyiwylxqoiq.supabase.co/storage/v1/object/sign/product%20images/hingeconvex-1.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9mYTY2MjExZi1lZmNjLTQ0ZmMtOWY2Ni0xZDM5N2NhNGE3NzYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJwcm9kdWN0IGltYWdlcy9oaW5nZWNvbnZleC0xLmpwZyIsImlhdCI6MTc2MTMzMzY0OCwiZXhwIjoyMDc2NjkzNjQ4fQ.23tbu38a9nkdwn25Hr10PhupgYVo-HZuHnjyM2ij2Qg",
+        "features": [
+          "Specialized hinge for eco-friendly goods with a convex (lenticular) edge.",
+          "Allows for the controlled movement necessary to achieve a perfect convex profile."
+        ],
+        "details": [
+          "All parts are constructed from durable steel."
+        ]
+      },
+      {
+        "id": "fine-turning-adapter",
+        "name": "Fine-Tuning Adapter",
+        "price": 4,
+        "imageSrc": "https://umnwnrvuonyiwylxqoiq.supabase.co/storage/v1/object/sign/product%20images/fineadapter-1.jpg?token=eyJraWQiOiJzdG9yYWdlLXVybC1zaWduaW5nLWtleV9mYTY2MjExZi1lZmNjLTQ0ZmMtOWY2Ni0xZDM5N2NhNGE3NzYiLCJhbGciOiJIUzI1NiJ9.eyJ1cmwiOiJwcm9kdWN0IGltYWdlcy9maW5lYWRhcHRlci0xLmpwZyIsImlhdCI6MTc2MTMzMzQ0NCwiZXhwIjoyMDc2NjkzNDQ0fQ.P_oRpoTxzNaq2ACdsNUMef1zXXQZQ-ShRbZnsAcK6qI",
+        "features": [
+          "Simple tool for precisely adjusting and maintaining the eco-friendly angle.",
+          "Hole diameter: 8 mm."
+        ],
+        "details": [
+          "A crucial element for achieving micro-bevels and final eco-friendly accuracy."
+        ]
+      }
+    ],
+    "authenticity": {
+      "title": "Commitment to Authenticity",
+      "text": "At <strong>EcoShop</strong>, we guarantee that all products and accessories listed here are <strong>100% original, proprietary designs</strong>. We are committed to manufacturing tools of the highest quality using our exclusive materials and engineering processes. When you choose EcoShop, you are investing in an <strong>authentic, precision eco products</strong> built for reliability and performance. We do not sell copies or third-party imitations."
+    }
+  },
+  "AuthForm": {
+    "title": {
+      "signup": "Create Account",
+      "signin": "Sign In"
+    },
+    "labels": {
+      "fullName": "Full Name",
+      "email": "Email",
+      "password": "Password"
+    },
+    "placeholders": {
+      "fullName": "Enter your full name",
+      "email": "Enter your email address",
+      "password": "Enter your password"
+    },
+    "buttons": {
+      "create": "Create Account",
+      "signin": "Sign In",
+      "loading": "Loading..."
+    },
+    "toggle": {
+      "haveAccount": "Already have an account? Sign In",
+      "noAccount": "Don’t have an account? Sign Up"
+    },
+    "errors": {
+      "unexpected": "An unexpected error occurred. Please try again later."
+    },
+    "success": {
+      "title": "Check your email",
+      "sentTo": "We sent an email to",
+      "instruction": "Click the button in the email to activate your account.",
+      "back": "Go back"
+    },
+    "signupSuccessTitle": "Account created!",
+    "signupSuccessDesc": "A verification email has been sent. Please confirm it to enable ordering.",
+    "signupSuccessAction": "Got it",
+    "resendEmail": "Resend a letter"
+  },
+  "AuthError": {
+    "loading": "Verifying...",
+    "title": {
+      "expired": "Action Required",
+      "accessDenied": "Access Denied",
+      "default": "Login Error"
+    },
+    "message": {
+      "expired": "Link invalid.",
+      "expired_suggestion": "If you were resetting your password or signing up, the system might have already verified you automatically. Please click the button below to continue.",
+      "accessDenied": "You do not have permission to access this page.",
+      "default": "Could not log in automatically."
+    },
+    "actions": {
+      "tryLogin": "Go to Profile / Change Password",
+      "requestNewLink": "Create New Account",
+      "goHome": "Go Home"
+    },
+    "enterEmailToResend": "If the button above didn't work, enter your email for a new link:",
+    "resendButton": "Resend Link",
+    "resendSuccess": "Email sent!",
+    "resendFailed": "Failed to send email",
+    "successVerified": "Login successful!"
+  },
+  "AuthConfirm": {
+    "loading": {
+      "title": "Confirming email...",
+      "message": "Please wait a moment"
+    },
+    "success": {
+      "title": "Email confirmed!",
+      "message": "Your email has been successfully verified. We are redirecting you to your profile..."
+    },
+    "error": {
+      "title": "Confirmation error",
+      "message": "The link is invalid or has expired. Redirecting to the signup page..."
+    },
+    "button": "Go to profile",
+    "redirecting": "Redirecting to profile...",
+    "verifying": "Verifying..."
+  },
+  "Common": {
+    "back": "Back",
+    "backToHome": "Back to home",
+    "backToShop": "Back to shop",
+    "viewAll": "View all",
+    "viewAllArticles": "All articles",
+    "viewProducts": "All products",
+    "watchAll": "View",
+    "showAll": "Show all",
+    "readMore": "Read more",
+    "loading": "Loading...",
+    "share": "Share",
+    "linkCopied": "Link copied",
+    "search": "Search",
+    "filters": "Filters",
+    "category": "Category",
+    "certificates": "Certifications",
+    "resetFilters": "Reset filters",
+    "resetAll": "Reset all",
+    "results": "{count, plural, one {item} other {items}}",
+    "minutes": "min",
+    "minutesRead": "min read",
+    "addToCart": "Add to cart",
+    "alreadyInCart": "Already in cart",
+    "outOfStock": "Out of stock",
+    "inStock": "In stock",
+    "stockUnits": "In stock — {count} pcs",
+    "addToWishlist": "Wishlist",
+    "inWishlist": "In wishlist",
+    "addedToWishlist": "Added to wishlist",
+    "removedFromWishlist": "Removed from wishlist",
+    "decrease": "Decrease",
+    "increase": "Increase",
+    "remove": "Remove",
+    "save": "Save",
+    "cancel": "Cancel",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "sending": "Sending...",
+    "saving": "Saving...",
+    "checking": "Checking...",
+    "tryAgain": "Try again",
+    "subscribe": "Subscribe",
+    "newsletterTitle": "Newsletter",
+    "newsletterMonthly": "Once a month — new products and eco guides.",
+    "trustCarbonShipping": "Carbon-neutral shipping",
+    "trustReturns": "7-day returns",
+    "trustCertified": "Certified materials",
+    "biodegradableMaterials": "Biodegradable materials",
+    "biodegradableDesc": "Natural components that return to the earth",
+    "noPlasticPackaging": "Plastic-free packaging",
+    "noPlasticDesc": "Only craft and recycled materials",
+    "ukrainianMakers": "Ukrainian makers",
+    "ukrainianDesc": "Local production with transparent supply chain",
+    "carbonNeutralShipping": "Carbon-neutral shipping",
+    "carbonNeutralDesc": "We offset emissions for every order",
+    "categoryLabels": {
+      "sharpeners": "Eco cosmetics",
+      "stones": "Reusable tableware",
+      "accessories": "Zero-waste accessories",
+      "all": "All products"
+    }
+  },
+  "Home": {
+    "heroLabel": "EcoShop · 2026",
+    "categoriesLabel": "02 · Categories",
+    "categoriesTitle": "Choose direction",
+    "featuredLabel": "03 · Selection",
+    "featuredTitle": "Editor's pick",
+    "featuredEmpty": "Nothing here yet. Add products via admin panel.",
+    "storyLabel": "04 · Our story",
+    "storyTitleFirst": "Fewer things.",
+    "storyTitleSecond": "More meaning.",
+    "storyDescription": "We started with a simple observation: everyday products create tons of waste, when they could last for years. EcoShop is a curated selection of things you can believe in. Only natural materials and local makers.",
+    "storyStat1": "100%",
+    "storyStat1Label": "Biodegradable packaging",
+    "storyStat2": "42",
+    "storyStat2Label": "Local makers",
+    "storyStat3": "−2.4t",
+    "storyStat3Label": "CO₂ saved"
+  },
+  "Blog": {
+    "label": "EcoShop Journal · 2026",
+    "titlePart1": "Thoughts on",
+    "titleHighlight": "conscious consumption",
+    "subtitle": "Guides, reviews, and honest talks about reducing footprint, local production, and small habits that change the day.",
+    "featured": "Featured",
+    "readArticle": "Read",
+    "searchPlaceholder": "Search articles...",
+    "emptyTitle": "Nothing found",
+    "emptyDescription": "Try a different category or clear search.",
+    "newsletterLabel": "Newsletter",
+    "newsletterTitle": "Once a month — eco essays and",
+    "newsletterTitleHighlight": "new products",
+    "newsletterDesc": "No spam, no noise. Only what we'd read ourselves over morning coffee.",
+    "categories": {
+      "all": "All articles",
+      "guides": "Guides",
+      "knowledge": "Knowledge",
+      "lifestyle": "Lifestyle"
+    },
+    "article": {
+      "relatedLabel": "Read more",
+      "relatedTitle": "Same category",
+      "share": "Share"
+    }
+  },
+  "Verify": {
+    "label": "Email verification",
+    "title": "Enter code",
+    "description": "We sent a 6-digit code to",
+    "checkInbox": "Check your inbox (and spam folder).",
+    "submit": "Verify",
+    "submitting": "Verifying...",
+    "resend": "Resend code",
+    "resendCooldown": "Resend ({s}s)",
+    "notReceived": "Didn't receive the code?",
+    "noEmailTitle": "Email not specified",
+    "noEmailDesc": "Go back to sign up to get a verification code.",
+    "backToSignup": "Back to sign up",
+    "successToast": "Email verified!",
+    "invalidCode": "Invalid or expired code",
+    "fillAll": "Enter all {n} digits",
+    "resendSuccess": "Code sent again",
+    "resendFailed": "Failed to send",
+    "brandLabel": "Security",
+    "brandTitle": "One step from your account",
+    "brandDesc": "We sent a 6-digit code. Enter it to verify your email."
+  },
+  "NotFound": {
+    "label": "404 · Page not found",
+    "titleFirst": "Lost",
+    "titleSecond": "in the",
+    "titleHighlight": "forest",
+    "subtitle": "The page you're looking for has moved or never existed. Return to the shop — there's plenty to see.",
+    "toShop": "To shop"
+  }
+}

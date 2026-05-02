@@ -1,0 +1,325 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter), 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-fraunces), 'Fraunces', Georgia, serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+/* === ECO PALETTE ===
+ * Primary       — deep forest green   #2D6A4F
+ * Accent        — leafy / sage green  #52B788
+ * Background    — warm off-white      #FBFAF5  (light) / deep moss #1A2A23 (dark)
+ * Foreground    — earthy brown        #1F2421
+ * Highlights    — terracotta, beige, sand
+ */
+:root {
+  --radius: 0.625rem;
+  --background: oklch(0.985 0.012 95);          /* warm off-white */
+  --foreground: oklch(0.21 0.02 145);            /* very dark green-brown */
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.21 0.02 145);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.21 0.02 145);
+  --primary: oklch(0.45 0.11 150);               /* deep forest green */
+  --primary-foreground: oklch(0.99 0.01 95);
+  --secondary: oklch(0.94 0.03 110);             /* pale sage */
+  --secondary-foreground: oklch(0.32 0.08 150);
+  --muted: oklch(0.95 0.015 100);                /* warm light beige */
+  --muted-foreground: oklch(0.5 0.04 145);       /* muted moss */
+  --accent: oklch(0.78 0.14 150);                /* leafy green */
+  --accent-foreground: oklch(0.22 0.04 145);
+  --destructive: oklch(0.58 0.22 28);            /* terracotta */
+  --border: oklch(0.9 0.02 110);
+  --input: oklch(0.92 0.018 110);
+  --ring: oklch(0.62 0.12 150);
+  --chart-1: oklch(0.55 0.14 150);               /* leaf green */
+  --chart-2: oklch(0.7 0.1 90);                  /* warm beige */
+  --chart-3: oklch(0.45 0.07 50);                /* earthy brown */
+  --chart-4: oklch(0.7 0.13 75);                 /* honey */
+  --chart-5: oklch(0.75 0.12 195);               /* sky / water */
+  --sidebar: oklch(0.97 0.018 100);
+  --sidebar-foreground: oklch(0.22 0.03 145);
+  --sidebar-primary: oklch(0.45 0.11 150);
+  --sidebar-primary-foreground: oklch(0.99 0.01 95);
+  --sidebar-accent: oklch(0.92 0.04 130);
+  --sidebar-accent-foreground: oklch(0.32 0.08 150);
+  --sidebar-border: oklch(0.9 0.02 110);
+  --sidebar-ring: oklch(0.62 0.12 150);
+}
+
+.dark {
+  --background: oklch(0.18 0.02 150);            /* deep moss */
+  --foreground: oklch(0.96 0.015 95);
+  --card: oklch(0.23 0.025 150);
+  --card-foreground: oklch(0.96 0.015 95);
+  --popover: oklch(0.23 0.025 150);
+  --popover-foreground: oklch(0.96 0.015 95);
+  --primary: oklch(0.78 0.14 150);               /* bright sage */
+  --primary-foreground: oklch(0.18 0.04 150);
+  --secondary: oklch(0.3 0.03 145);
+  --secondary-foreground: oklch(0.96 0.015 95);
+  --muted: oklch(0.3 0.025 145);
+  --muted-foreground: oklch(0.74 0.04 110);
+  --accent: oklch(0.55 0.13 150);
+  --accent-foreground: oklch(0.99 0.01 95);
+  --destructive: oklch(0.7 0.19 25);
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 16%);
+  --ring: oklch(0.62 0.12 150);
+  --chart-1: oklch(0.7 0.14 150);
+  --chart-2: oklch(0.75 0.1 90);
+  --chart-3: oklch(0.65 0.08 50);
+  --chart-4: oklch(0.78 0.13 75);
+  --chart-5: oklch(0.72 0.12 195);
+  --sidebar: oklch(0.21 0.025 150);
+  --sidebar-foreground: oklch(0.96 0.015 95);
+  --sidebar-primary: oklch(0.78 0.14 150);
+  --sidebar-primary-foreground: oklch(0.18 0.04 150);
+  --sidebar-accent: oklch(0.3 0.03 145);
+  --sidebar-accent-foreground: oklch(0.96 0.015 95);
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: oklch(0.62 0.12 150);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: var(--font-inter), 'Inter', ui-sans-serif, system-ui, sans-serif;
+  }
+  ::selection {
+    background: color-mix(in oklch, var(--primary) 25%, transparent);
+  }
+  *:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+/* === ECO design utilities === */
+.font-display {
+  font-family: var(--font-fraunces), 'Fraunces', Georgia, serif;
+  letter-spacing: -0.02em;
+}
+
+.section-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  font-weight: 600;
+}
+
+/* Logo */
+.logo-typo {
+  font-family: var(--font-fraunces), 'Fraunces', Georgia, serif;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+.logo-leaf {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  background: var(--accent);
+  border-radius: 50% 0;
+  transform: rotate(-45deg);
+  flex-shrink: 0;
+}
+
+/* Eco-cert badges */
+.eco-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-radius: 999px;
+  line-height: 1;
+}
+.eco-badge-vegan { background: rgba(124,181,24,0.15); color: #5e8a13; }
+.eco-badge-bio   { background: rgba(164,172,134,0.2); color: oklch(0.4 0.06 105); }
+.eco-badge-pf    { background: rgba(82,183,136,0.18); color: oklch(0.42 0.13 150); }
+.dark .eco-badge-vegan { color: #a8d556; }
+.dark .eco-badge-bio   { color: oklch(0.78 0.06 105); }
+.dark .eco-badge-pf    { color: oklch(0.78 0.13 150); }
+
+/* Smooth shimmer for skeletons */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+.skel {
+  background: linear-gradient(90deg, var(--muted) 0%, color-mix(in oklch, var(--muted) 60%, var(--card)) 50%, var(--muted) 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+.animate-slideIn {
+  animation: slideIn 0.3s ease-out forwards;
+}
+@keyframes slideOut {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Налаштування React Quill для темної теми */
+.rich-text-editor .ql-toolbar {
+  border-color: #e5e7eb !important; /* gray-200 */
+  background-color: #f9fafb; /* gray-50 */
+  border-top-left-radius: 0.75rem;
+  border-top-right-radius: 0.75rem;
+}
+
+.dark .rich-text-editor .ql-toolbar {
+  border-color: #262626 !important; /* neutral-800 */
+  background-color: #171717; /* neutral-900 */
+}
+
+.dark .rich-text-editor .ql-toolbar .ql-stroke {
+  stroke: #d4d4d4 !important; /* neutral-300 */
+}
+
+.dark .rich-text-editor .ql-toolbar .ql-fill {
+  fill: #d4d4d4 !important; /* neutral-300 */
+}
+
+.dark .rich-text-editor .ql-toolbar button:hover .ql-stroke {
+  stroke: #ffffff !important;
+}
+
+.rich-text-editor .ql-container {
+  border-color: #e5e7eb !important;
+  border-bottom-left-radius: 0.75rem;
+  border-bottom-right-radius: 0.75rem;
+  font-family: inherit;
+  font-size: 0.875rem; /* text-sm */
+}
+
+.dark .rich-text-editor .ql-container {
+  border-color: #262626 !important;
+  color: #fff;
+}
+
+.rich-text-editor .ql-editor {
+  min-height: 150px;
+}
+
+/* Виділений текст в редакторі */
+.rich-text-editor .ql-editor.ql-blank::before {
+  color: #9ca3af; /* gray-400 */
+  font-style: normal;
+}
+
+/* Стилі для контенту з редактора */
+.rich-text-content {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+
+.rich-text-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+
+.rich-text-content ul {
+  list-style-type: disc;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.rich-text-content ol {
+  list-style-type: decimal;
+  padding-left: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.rich-text-content p {
+  margin-bottom: 0.75rem;
+}
+
+.rich-text-content a {
+  color: #2D6A4F;
+  text-decoration: underline;
+}
+
+/* === ECO UTILITIES === */
+.eco-gradient {
+  background: linear-gradient(135deg, #2D6A4F 0%, #52B788 50%, #95D5B2 100%);
+}
+
+.eco-gradient-soft {
+  background: linear-gradient(135deg, #D8F3DC 0%, #FBFAF5 100%);
+}
+
+.dark .eco-gradient-soft {
+  background: linear-gradient(135deg, #1A2A23 0%, #2D3A33 100%);
+}
+
+.eco-leaf-pattern {
+  background-image: radial-gradient(circle at 25% 25%, rgba(82, 183, 136, 0.08) 0%, transparent 50%),
+                    radial-gradient(circle at 75% 75%, rgba(45, 106, 79, 0.06) 0%, transparent 50%);
+}

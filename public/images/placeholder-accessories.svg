@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="g3" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E8F5E9"/>
+      <stop offset="100%" stop-color="#74C69D"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#g3)"/>
+  <!-- Bamboo brush -->
+  <g transform="translate(200,200) rotate(-15)" fill="#2D6A4F" opacity="0.85">
+    <rect x="-100" y="-15" width="120" height="30" rx="15"/>
+    <rect x="20" y="-25" width="80" height="50" rx="6" fill="#52B788"/>
+    <g fill="#FBFAF5">
+      <rect x="28" y="20" width="3" height="25"/>
+      <rect x="36" y="20" width="3" height="28"/>
+      <rect x="44" y="20" width="3" height="25"/>
+      <rect x="52" y="20" width="3" height="28"/>
+      <rect x="60" y="20" width="3" height="25"/>
+      <rect x="68" y="20" width="3" height="28"/>
+      <rect x="76" y="20" width="3" height="25"/>
+      <rect x="84" y="20" width="3" height="28"/>
+    </g>
+  </g>
+  <text x="200" y="370" font-family="system-ui, sans-serif" font-size="22" font-weight="600" text-anchor="middle" fill="#1B4332">Zero-waste аксесуари</text>
+</svg>

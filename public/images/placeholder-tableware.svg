@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBFAF5"/>
+      <stop offset="100%" stop-color="#B7E4C7"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#g2)"/>
+  <!-- Glass bottle silhouette -->
+  <g transform="translate(200,200)" fill="#2D6A4F" opacity="0.85">
+    <rect x="-15" y="-130" width="30" height="20" rx="4"/>
+    <rect x="-12" y="-110" width="24" height="15"/>
+    <path d="M -35,-95 Q -35,-80 -45,-65 L -45,80 Q -45,110 -35,115 L 35,115 Q 45,110 45,80 L 45,-65 Q 35,-80 35,-95 Z" />
+    <ellipse cx="-15" cy="-30" rx="8" ry="20" fill="#52B788" opacity="0.3"/>
+  </g>
+  <text x="200" y="370" font-family="system-ui, sans-serif" font-size="22" font-weight="600" text-anchor="middle" fill="#1B4332">Багаторазовий посуд</text>
+</svg>

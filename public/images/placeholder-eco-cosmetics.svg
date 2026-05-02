@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D8F3DC"/>
+      <stop offset="100%" stop-color="#95D5B2"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="400" fill="url(#g1)"/>
+  <g transform="translate(200,200)" fill="#2D6A4F" opacity="0.85">
+    <path d="M 0,-90 C -50,-90 -90,-50 -90,0 C -90,50 -50,90 0,90 C 50,90 90,50 90,0 C 90,-50 50,-90 0,-90 Z M 0,-60 C 33,-60 60,-33 60,0 C 60,33 33,60 0,60 C -33,60 -60,33 -60,0 C -60,-33 -33,-60 0,-60 Z" fill-rule="evenodd"/>
+    <path d="M -25,-25 Q 0,-45 25,-25 Q 45,0 25,25 Q 0,45 -25,25 Q -45,0 -25,-25 Z"/>
+  </g>
+  <text x="200" y="340" font-family="system-ui, sans-serif" font-size="22" font-weight="600" text-anchor="middle" fill="#1B4332">Еко-косметика</text>
+</svg>
