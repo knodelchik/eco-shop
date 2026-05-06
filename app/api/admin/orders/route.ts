@@ -142,20 +142,55 @@ export async function PATCH(request: NextRequest) {
     if (!auth.ok) return NextResponse.json({ error: auth.error }, { status: auth.status });
 
     const id = Number(body?.id);
-    const status = String(body?.status ?? '');
-    if (!id || !ALLOWED_STATUSES.has(status)) {
+    if (!id) {
+      return NextResponse.json({ error: 'id required' }, { status: 400 });
+    }
+
+    // Дозволяємо оновлювати status, notes — або обидва. Note-only update
+    // використовується сторінкою для збереження трекінгу (kludge до того,
+    // як з'явиться окрема таблиця shipments).
+    const hasStatus = typeof body?.status === 'string' && body.status.length > 0;
+    const hasNotes = typeof body?.notes === 'string';
+
+    if (!hasStatus && !hasNotes) {
       return NextResponse.json(
-        { error: 'id and valid status required' },
+        { error: 'either status or notes required' },
         { status: 400 }
       );
     }
 
-    const updated = (await sql`
-      UPDATE orders
-      SET status = ${status}, updated_at = NOW()
-      WHERE id = ${id}
-      RETURNING id, email, total, currency, status
-    `) as Record<string, unknown>[];
+    if (hasStatus && !ALLOWED_STATUSES.has(String(body.status))) {
+      return NextResponse.json(
+        { error: 'invalid status value' },
+        { status: 400 }
+      );
+    }
+
+    let updated: Record<string, unknown>[];
+    if (hasStatus && hasNotes) {
+      updated = (await sql`
+        UPDATE orders
+        SET status = ${String(body.status)},
+            notes = ${String(body.notes)},
+            updated_at = NOW()
+        WHERE id = ${id}
+        RETURNING id, email, total, currency, status, notes
+      `) as Record<string, unknown>[];
+    } else if (hasStatus) {
+      updated = (await sql`
+        UPDATE orders
+        SET status = ${String(body.status)}, updated_at = NOW()
+        WHERE id = ${id}
+        RETURNING id, email, total, currency, status, notes
+      `) as Record<string, unknown>[];
+    } else {
+      updated = (await sql`
+        UPDATE orders
+        SET notes = ${String(body.notes)}, updated_at = NOW()
+        WHERE id = ${id}
+        RETURNING id, email, total, currency, status, notes
+      `) as Record<string, unknown>[];
+    }
 
     if (updated.length === 0) {
       return NextResponse.json({ error: 'order not found' }, { status: 404 });
@@ -164,8 +199,10 @@ export async function PATCH(request: NextRequest) {
     const order = updated[0];
     const recipient = String(order.email ?? '');
 
-    // Notification — best-effort; не валимо PATCH якщо пошта впала.
-    if (transporter && recipient) {
+    // Email шлемо тільки коли реально змінили status. Note-only update —
+    // тиха операція (тільки для адміна, не повідомляємо юзера).
+    if (hasStatus && transporter && recipient) {
+      const status = String(body.status);
       const label = STATUS_LABELS_UK[status] ?? status;
       const subject = `EcoShop: статус замовлення №${order.id} — ${label}`;
       const html = `
