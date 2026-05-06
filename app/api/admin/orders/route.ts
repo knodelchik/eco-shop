@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
 import { sql } from '@/lib/neon-db';
 import { requireAdmin } from '@/lib/auth-guard';
+import { sendExpoPush } from '@/lib/expo-push';
 
 const transporter = process.env.GMAIL_USER
   ? nodemailer.createTransport({
@@ -202,21 +203,21 @@ export async function PATCH(request: NextRequest) {
             notes = ${String(body.notes)},
             updated_at = NOW()
         WHERE id = ${id}
-        RETURNING id, email, total, currency, status, notes
+        RETURNING id, user_id, email, total, currency, status, notes
       `) as Record<string, unknown>[];
     } else if (hasStatus) {
       updated = (await sql`
         UPDATE orders
         SET status = ${String(body.status)}, updated_at = NOW()
         WHERE id = ${id}
-        RETURNING id, email, total, currency, status, notes
+        RETURNING id, user_id, email, total, currency, status, notes
       `) as Record<string, unknown>[];
     } else {
       updated = (await sql`
         UPDATE orders
         SET notes = ${String(body.notes)}, updated_at = NOW()
         WHERE id = ${id}
-        RETURNING id, email, total, currency, status, notes
+        RETURNING id, user_id, email, total, currency, status, notes
       `) as Record<string, unknown>[];
     }
 
@@ -253,6 +254,32 @@ export async function PATCH(request: NextRequest) {
           html,
         })
         .catch((e) => console.error('order status email failed:', e));
+    }
+
+    // Push на мобілку — тільки при зміні статусу. Тягнемо всі девайси юзера
+    // і викликаємо Expo Push API. Best-effort, не блокує відповідь.
+    if (hasStatus && order.user_id) {
+      const status = String(body.status);
+      const label = STATUS_LABELS_UK[status] ?? status;
+      sql`
+        SELECT expo_push_token FROM user_devices
+        WHERE user_id = ${String(order.user_id)}::uuid
+      `
+        .then((rows) => {
+          const tokens = (rows as Record<string, unknown>[])
+            .map((r) => String(r.expo_push_token))
+            .filter(Boolean);
+          if (tokens.length === 0) return;
+          return sendExpoPush(
+            tokens.map((token) => ({
+              to: token,
+              title: `Замовлення №${order.id}`,
+              body: `Статус: ${label}`,
+              data: { orderId: String(order.id), status },
+            }))
+          );
+        })
+        .catch((e) => console.error('order status push failed:', e));
     }
 
     return NextResponse.json({ ok: true, order });
