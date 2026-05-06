@@ -2,8 +2,8 @@ import { NextResponse } from 'next/server';
 import { sql } from '@/lib/neon-db';
 import { createMonoInvoice } from '../../lib/monobank';
 import { generateAccessToken, PAYPAL_API_BASE } from '../../lib/paypal';
+import { getBaseUrl } from '@/lib/base-url';
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'http://localhost:3000';
 const FLAT_SHIPPING_USD = 5;
 
 interface ClientItem {
@@ -28,6 +28,7 @@ async function getExchangeRate(): Promise<number> {
 
 export async function POST(req: Request) {
   try {
+    const BASE_URL = getBaseUrl();
     const body = await req.json();
     const { items, shippingAddress, shippingType, method } = body as {
       items: ClientItem[];

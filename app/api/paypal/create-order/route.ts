@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { sql } from '@/lib/neon-db';
 import { generateAccessToken, PAYPAL_API_BASE } from '../../../lib/paypal';
+import { getBaseUrl } from '@/lib/base-url';
 
 /**
  * Створює замовлення у нашій БД (Neon) і відповідне PayPal-замовлення.
@@ -112,8 +113,8 @@ export async function POST(req: Request) {
         brand_name: 'EcoShop',
         shipping_preference: 'NO_SHIPPING',
         user_action: 'PAY_NOW',
-        return_url: `${process.env.NEXT_PUBLIC_BASE_URL}/order/result`,
-        cancel_url: `${process.env.NEXT_PUBLIC_BASE_URL}/cart`,
+        return_url: `${getBaseUrl()}/order/result`,
+        cancel_url: `${getBaseUrl()}/cart`,
       },
     };
 
