@@ -34,11 +34,28 @@ export async function GET(request: NextRequest) {
       items = itemRows as Record<string, unknown>[];
     }
 
-    // Збираємо в один масив з вкладеними items
-    const result = (orders as Record<string, unknown>[]).map((o) => ({
-      ...o,
-      order_items: items.filter((i) => Number(i.order_id) === Number(o.id)),
-    }));
+    // Збираємо в один масив з вкладеними items + legacy aliases для UI:
+    // image_url ← product_image, price ← unit_price, shipping_type/cost зі jsonb.
+    const result = (orders as Record<string, unknown>[]).map((o) => {
+      const shipping =
+        typeof o.shipping_address === 'object' && o.shipping_address !== null
+          ? (o.shipping_address as Record<string, unknown>)
+          : {};
+      return {
+        ...o,
+        id: String(o.id),
+        shipping_type: shipping.shipping_type ?? 'Standard',
+        shipping_cost: Number(shipping.shipping_cost ?? 0),
+        order_items: items
+          .filter((i) => Number(i.order_id) === Number(o.id))
+          .map((i) => ({
+            ...i,
+            id: String(i.id),
+            image_url: i.product_image,
+            price: Number(i.unit_price ?? 0),
+          })),
+      };
+    });
 
     return NextResponse.json(result);
   } catch (error) {

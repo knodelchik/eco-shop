@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useMemo } from 'react';
 import { format } from 'date-fns';
+import { authService } from '../../services/authService';
 import {
   Sheet,
   SheetContent,
@@ -69,7 +70,15 @@ export default function AdminOrdersPage() {
   const loadOrders = async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/admin/orders');
+      // Передаємо поточного адміна у query — server-side requireAdmin
+      // валідує по user_profiles.role або NEXT_PUBLIC_ADMIN_EMAILS.
+      // Без цього API повертає 401, бо cookie на наш origin не пишеться.
+      const { user } = await authService.getCurrentUser();
+      const params = new URLSearchParams();
+      if (user?.id) params.set('actorUserId', user.id);
+      if (user?.email) params.set('actorEmail', user.email);
+      const qs = params.toString() ? `?${params}` : '';
+      const res = await fetch(`/api/admin/orders${qs}`);
       if (res.ok) setOrders(await res.json());
       else toast.error('Помилка завантаження замовлень');
     } catch (e) {
@@ -105,10 +114,16 @@ export default function AdminOrdersPage() {
 
   // Оновлення статусу
   const updateStatus = async (orderId: string, newStatus: string) => {
+    const { user } = await authService.getCurrentUser();
     const res = await fetch('/api/admin/orders', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ id: orderId, status: newStatus }),
+      body: JSON.stringify({
+        id: orderId,
+        status: newStatus,
+        actorUserId: user?.id,
+        actorEmail: user?.email,
+      }),
     });
     if (res.ok) {
       setOrders((prev) =>
@@ -129,12 +144,15 @@ export default function AdminOrdersPage() {
     if (!selectedOrder) return;
     setIsSavingTracking(true);
 
+    const { user } = await authService.getCurrentUser();
     const res = await fetch('/api/admin/orders', {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         id: selectedOrder.id,
         notes: `Tracking: ${trackingInput}; Service: ${serviceInput}`,
+        actorUserId: user?.id,
+        actorEmail: user?.email,
       }),
     });
 

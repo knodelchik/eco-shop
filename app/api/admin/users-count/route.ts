@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { sql } from '@/lib/neon-db';
 import { requireAdmin } from '@/lib/auth-guard';
 
@@ -9,8 +9,12 @@ import { requireAdmin } from '@/lib/auth-guard';
  * заповнюється авто-апсертом у lib/auth-guard.ts при кожному session-check.
  * Кількість = юзери, які хоч раз заходили після останнього деплою.
  */
-export async function GET() {
-  const auth = await requireAdmin();
+export async function GET(request: NextRequest) {
+  const { searchParams } = new URL(request.url);
+  const auth = await requireAdmin({
+    userId: searchParams.get('actorUserId'),
+    email: searchParams.get('actorEmail'),
+  });
   if (!auth.ok) return NextResponse.json({ error: auth.error }, { status: auth.status });
 
   try {

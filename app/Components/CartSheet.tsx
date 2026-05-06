@@ -13,12 +13,7 @@ import { Link } from '@/navigation';
 import { useTranslations, useLocale } from 'next-intl';
 import { useState } from 'react';
 import { useCurrency } from '@/app/context/CurrencyContext';
-
-const CATEGORY_BG: Record<string, string> = {
-  sharpeners: 'linear-gradient(160deg, oklch(0.94 0.03 110) 0%, oklch(0.78 0.14 150) 130%)',
-  stones: 'linear-gradient(200deg, oklch(0.95 0.015 100) 0%, oklch(0.55 0.13 150) 130%)',
-  accessories: 'linear-gradient(140deg, oklch(0.92 0.04 130) 0%, oklch(0.45 0.11 150) 130%)',
-};
+import { ProductImage } from '@/app/Components/ProductImage';
 
 export default function CartSheet() {
   const t = useTranslations('CartSheet');
@@ -89,10 +84,14 @@ export default function CartSheet() {
                   key={item.id}
                   className="flex items-start gap-4 p-3 rounded-2xl bg-card border border-border hover:border-foreground/20 transition-colors"
                 >
-                  <div
-                    className="w-20 h-20 rounded-xl flex-shrink-0"
-                    style={{ background: CATEGORY_BG[item.category as string] ?? CATEGORY_BG.accessories }}
-                  />
+                  <div className="w-20 h-20 rounded-xl flex-shrink-0 overflow-hidden">
+                    <ProductImage
+                      src={item.images?.[0]}
+                      alt={item.title}
+                      category={item.category as string}
+                      sizes="80px"
+                    />
+                  </div>
                   <div className="flex-1 min-w-0 py-1">
                     <p className="font-medium leading-tight line-clamp-2 mb-2">
                       {locale === 'uk' ? item.title_uk || item.title : item.title}

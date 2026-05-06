@@ -34,10 +34,15 @@ const ALLOWED_STATUSES = new Set([
  * NEXT_PUBLIC_ADMIN_EMAILS). PATCH додатково надсилає юзеру email-нотифікацію.
  */
 export async function GET(request: NextRequest) {
-  const auth = await requireAdmin();
+  const { searchParams } = new URL(request.url);
+  // Веб-клієнт пробрасає actorUserId/actorEmail з authService.getCurrentUser()
+  // (cookie на наш origin не пишеться — бо Neon Auth на іншому домені).
+  const auth = await requireAdmin({
+    userId: searchParams.get('actorUserId'),
+    email: searchParams.get('actorEmail'),
+  });
   if (!auth.ok) return NextResponse.json({ error: auth.error }, { status: auth.status });
 
-  const { searchParams } = new URL(request.url);
   const since = searchParams.get('since');
   const limit = searchParams.get('limit');
   const status = searchParams.get('status');
@@ -138,7 +143,10 @@ export async function GET(request: NextRequest) {
 export async function PATCH(request: NextRequest) {
   try {
     const body = await request.json();
-    const auth = await requireAdmin({ userId: body?.actorUserId });
+    const auth = await requireAdmin({
+      userId: body?.actorUserId,
+      email: body?.actorEmail,
+    });
     if (!auth.ok) return NextResponse.json({ error: auth.error }, { status: auth.status });
 
     const id = Number(body?.id);
