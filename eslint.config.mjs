@@ -10,6 +10,22 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+  // Глобальні ignores — окремий об'єкт без інших ключів, інакше у flat config
+  // не сприймається як global ignore (буде ігнорувати лише для конкретного
+  // блоку правил). Без цього lint сканує згенеровані .next/build/ і дає 40k+
+  // false positives.
+  {
+    ignores: [
+      "node_modules/**",
+      ".next/**",
+      "out/**",
+      "build/**",
+      "dist/**",
+      "next-env.d.ts",
+      "playwright-report/**",
+      "test-results/**",
+    ],
+  },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
   {
     rules: {
@@ -22,13 +38,6 @@ const eslintConfig = [
       // Дозволяємо ts-ignore
       "@typescript-eslint/ban-ts-comment": "off",
     },
-    ignores: [
-      "node_modules/**",
-      ".next/**",
-      "out/**",
-      "build/**",
-      "next-env.d.ts",
-    ],
   },
 ];
 

@@ -254,7 +254,17 @@ export async function requireUser(): Promise<
  * також userId або email з body/query — у такому разі робимо upsert профілю
  * та звіряємо role у БД.
  */
-const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? '')
+// Список admin-email-ів. Підтримуємо обидва імені змінних:
+//   - ADMIN_EMAILS (server-only, рекомендовано)
+//   - NEXT_PUBLIC_ADMIN_EMAILS (legacy, був видний у клієнтському bundle)
+// Server-only варіант пріоритетний. Сторінка admin-layout.tsx досі читає
+// NEXT_PUBLIC_ADMIN_EMAILS у браузері — це bootstrap-fallback, який можна
+// прибрати після того як БД-роль виставлена для адміна.
+const ADMIN_EMAILS = (
+  process.env.ADMIN_EMAILS ??
+  process.env.NEXT_PUBLIC_ADMIN_EMAILS ??
+  ''
+)
   .split(',')
   .map((e) => e.trim().toLowerCase())
   .filter(Boolean);

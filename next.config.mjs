@@ -57,17 +57,23 @@ const nextConfig = {
     ];
   },
   /**
-   * CORS-заголовки для /api/* — потрібні щоб мобільний клієнт
-   * (eco-shop-mobile на Expo) міг звертатись до API з іншого origin.
-   * Браузерний веб-клієнт працює через cookies на тому ж origin
-   * і CORS йому не потрібен.
+   * CORS-заголовки для /api/*. Мобільний клієнт (Expo) має `Origin`
+   * відсутній або `null` — браузер це дозволяє і без CORS, але fetch з
+   * web-сторінок іншого домену тепер блокується (раніше було `*`).
+   *
+   * Якщо у майбутньому хочеш дозволити власний public API — додай
+   * referer-перевірку у конкретні route handlers замість CORS-allowlist.
    */
   async headers() {
     return [
       {
         source: '/api/:path*',
         headers: [
-          { key: 'Access-Control-Allow-Origin', value: '*' },
+          // Vercel-домен достатньо. Експо-сесія без Origin не блокується.
+          {
+            key: 'Access-Control-Allow-Origin',
+            value: 'https://eco-shop-psi.vercel.app',
+          },
           {
             key: 'Access-Control-Allow-Methods',
             value: 'GET, POST, PUT, PATCH, DELETE, OPTIONS',
@@ -76,6 +82,7 @@ const nextConfig = {
             key: 'Access-Control-Allow-Headers',
             value: 'Content-Type, Authorization, X-Requested-With',
           },
+          { key: 'Access-Control-Allow-Credentials', value: 'true' },
           { key: 'Access-Control-Max-Age', value: '86400' },
         ],
       },
