@@ -540,8 +540,9 @@ export default function AdminOrdersPage() {
                   <div className="flex justify-between border-b border-dashed border-gray-200 dark:border-neutral-800 pb-2">
                     <span className="text-gray-500">Ім'я:</span>
                     <span className="font-medium text-right">
-                      {selectedOrder.shipping_address?.full_name ||
-                        selectedOrder.users?.full_name ||
+                      {selectedOrder.users?.full_name ||
+                        selectedOrder.shipping_address?.recipient ||
+                        selectedOrder.shipping_address?.full_name ||
                         'Не вказано'}
                     </span>
                   </div>

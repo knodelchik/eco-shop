@@ -174,6 +174,26 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
+    // Якщо переходимо у cancelled — треба повернути stock на склад.
+    // Робимо це ДО UPDATE статусу, щоб не плутатись з повторними cancel.
+    let stockReturned = false;
+    if (hasStatus && body.status === 'cancelled') {
+      const prev = (await sql`
+        SELECT status FROM orders WHERE id = ${id} LIMIT 1
+      `) as Record<string, unknown>[];
+      const prevStatus = String(prev[0]?.status ?? '');
+      // Stock повертаємо лише якщо замовлення було активне (не вже скасоване).
+      if (prevStatus && prevStatus !== 'cancelled') {
+        await sql`
+          UPDATE products p
+          SET stock = p.stock + i.quantity, updated_at = NOW()
+          FROM order_items i
+          WHERE i.order_id = ${id} AND p.id = i.product_id
+        `;
+        stockReturned = true;
+      }
+    }
+
     let updated: Record<string, unknown>[];
     if (hasStatus && hasNotes) {
       updated = (await sql`
@@ -203,6 +223,7 @@ export async function PATCH(request: NextRequest) {
     if (updated.length === 0) {
       return NextResponse.json({ error: 'order not found' }, { status: 404 });
     }
+    void stockReturned;
 
     const order = updated[0];
     const recipient = String(order.email ?? '');

@@ -15,13 +15,14 @@ export default function OrderResultPage() {
 
   const source = searchParams.get('source'); // 'paypal' або 'monobank'
   const orderId = searchParams.get('orderId'); // Наш внутрішній ID
-  
-  // Стан завантаження потрібен тільки якщо ми щось перевіряємо.
-  // Але якщо ми прийшли від PayPalButtons, то все вже добре.
+  // Для PayPal redirect-flow тут приходить token = PayPal-OrderId.
+  // Якщо є — треба викликати capture-order, інакше платіж лишиться у статусі
+  // "approved" і гроші не спишуться.
+  const paypalToken = searchParams.get('token');
+
   const [paymentStatus, setPaymentStatus] = useState<'loading' | 'success' | 'failure'>('loading');
 
   useEffect(() => {
-    // Функція ініціалізації
     const initResult = async () => {
       if (!orderId) {
         setPaymentStatus('failure');
@@ -30,18 +31,36 @@ export default function OrderResultPage() {
 
       // 1. PAYPAL
       if (source === 'paypal') {
-        // Якщо ми прийшли сюди, значить компонент PayPalCheckout вже виконав Capture і отримав 'COMPLETED'.
-        // Нам не потрібно робити це знову. Просто показуємо успіх.
+        if (paypalToken) {
+          // Redirect-flow: треба capture. Якщо capture запустив PayPalButtons
+          // (компонентний JS-flow) — token у URL не буде, і ми просто
+          // показуємо успіх (capture відбувся всередині компонента).
+          try {
+            const res = await fetch('/api/paypal/capture-order', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ orderID: paypalToken }),
+            });
+            if (!res.ok) {
+              setPaymentStatus('failure');
+              return;
+            }
+          } catch (e) {
+            console.error('PayPal capture failed:', e);
+            setPaymentStatus('failure');
+            return;
+          }
+        }
         setPaymentStatus('success');
         clearCart();
-      } 
+      }
       // 2. MONOBANK
       else if (source === 'monobank') {
-        // Для Монобанку, оскільки це редірект, ми теж показуємо успіх авансом (для UX).
-        // Реальний статус прийде на вебхук.
+        // Для Mono — webhook оновить статус paid асинхронно. Показуємо success
+        // авансом для UX. Якщо платіж не пройшов, webhook поставить cancelled.
         setPaymentStatus('success');
         clearCart();
-      } 
+      }
       // 3. НЕВІДОМЕ ДЖЕРЕЛО
       else {
         setPaymentStatus('failure');
@@ -49,7 +68,7 @@ export default function OrderResultPage() {
     };
 
     initResult();
-  }, [source, orderId, clearCart]);
+  }, [source, orderId, paypalToken, clearCart]);
 
   // --- UI ---
   
