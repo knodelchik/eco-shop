@@ -222,7 +222,7 @@ export const authService = {
   },
 
   // === ПРОФІЛЬ ===
-  // Профіль зберігається у neon_auth.users_sync, але змінювати його з клієнта
+  // Базові поля керуються Neon Auth, але змінювати їх з клієнта
   // прямо не можна. Для додаткових полів (full_name, phone) — використовуйте
   // updateUser нижче, який оновлює metadata.
   async getUserProfile(

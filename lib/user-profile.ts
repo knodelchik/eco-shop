@@ -1,18 +1,19 @@
 /**
- * Серверний хелпер для роботи з кастомним профілем користувача.
+ * Серверний хелпер для синхронізації Neon Auth-юзера з нашою таблицею
+ * `user_profiles`. Neon Auth тримає auth-поля (email, password hash) у
+ * власних таблицях, а кастомні поля магазину (full_name, phone, role)
+ * живуть у нашій `user_profiles`.
  *
- * Контекст: Neon Auth тримає базові auth-поля (email, password hash, etc.)
- * у власній таблиці `neon_auth.users_sync`, яку ми не контролюємо. Кастомні
- * поля магазину (full_name, phone, role) живуть у нашій `user_profiles`.
- *
- * Проблема: коли користувач реєструється через Neon Auth, рядок у
- * `user_profiles` НЕ створюється автоматично — лише при першому виклику
- * PATCH /api/profile. Через це не можна виставити role='admin' SQL-ом, бо
- * рядка ще не існує.
- *
- * Рішення: lazy-upsert при першому запиті GET /api/profile (і будь-якому
- * іншому місці, що покладається на наявність рядка). ON CONFLICT DO NOTHING
- * атомарно і без race conditions.
+ * Контракт:
+ *   - Викликається з `auth-guard.ts:fetchSessionUser` ПРИ КОЖНОМУ session-
+ *     check-у (через requireOwnUser або /api/auth/me). Це гарантовано
+ *     спрацьовує одразу після того, як юзер вперше отримує сесію.
+ *   - Якщо Neon Auth повернув `name` (з форми реєстрації) — записуємо у
+ *     full_name. На existing-row робимо COALESCE: якщо full_name був NULL,
+ *     бекфілимо; якщо вже заповнений — не перетираємо те, що юзер міг
+ *     відредагувати у профілі.
+ *   - role встановлюється тільки при першому INSERT. Подальші upsert-и
+ *     НЕ перетирають role (адмін лишається адміном).
  */
 import 'server-only';
 import { sql } from '@/lib/neon-db';
@@ -24,24 +25,26 @@ export interface UserProfileRow {
   role: 'user' | 'admin';
 }
 
-/**
- * Гарантує, що в `user_profiles` існує рядок для userId. Повертає актуальні
- * дані профілю. Якщо рядок треба було створити — створює з default role='user'.
- */
-export async function ensureUserProfile(userId: string): Promise<UserProfileRow> {
-  // Атомарний upsert — якщо рядок уже є, нічого не змінюємо.
-  // role вказуємо явно щоб не залежати від колоночного DEFAULT.
-  await sql`
-    INSERT INTO user_profiles (user_id, role)
-    VALUES (${userId}::uuid, 'user')
-    ON CONFLICT (user_id) DO NOTHING
-  `;
+export async function ensureUserProfile(
+  userId: string,
+  defaultName?: string | null
+): Promise<UserProfileRow> {
+  const seedName = defaultName && defaultName.trim().length > 0 ? defaultName.trim() : null;
 
+  // Один round-trip: upsert з COALESCE на full_name + повертаємо актуальний рядок.
+  // EXCLUDED.full_name = новий seedName; user_profiles.full_name = поточне значення.
+  // COALESCE(current, new) → якщо current уже встановлений, не чіпаємо.
   const rows = (await sql`
-    SELECT user_id, full_name, phone, role
-    FROM user_profiles
-    WHERE user_id = ${userId}::uuid
-    LIMIT 1
+    INSERT INTO user_profiles (user_id, full_name, role)
+    VALUES (${userId}::uuid, ${seedName}, 'user')
+    ON CONFLICT (user_id) DO UPDATE SET
+      full_name = COALESCE(user_profiles.full_name, EXCLUDED.full_name),
+      updated_at = CASE
+        WHEN user_profiles.full_name IS NULL AND EXCLUDED.full_name IS NOT NULL
+          THEN NOW()
+        ELSE user_profiles.updated_at
+      END
+    RETURNING user_id, full_name, phone, role
   `) as Record<string, unknown>[];
 
   const row = rows[0];

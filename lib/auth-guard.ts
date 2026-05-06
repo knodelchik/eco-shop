@@ -15,12 +15,17 @@
  * читалася на серверному боці і `get-session` повертав юзера.
  */
 import { cookies, headers } from 'next/headers';
+import { ensureUserProfile } from '@/lib/user-profile';
 
 export type AuthUser = {
   id: string;
   email: string;
   name?: string;
   emailVerified?: boolean;
+  /** Кастомні поля з нашої таблиці user_profiles (синкається тут же). */
+  role?: 'user' | 'admin';
+  full_name?: string | null;
+  phone?: string | null;
 };
 
 const SESSION_COOKIE_NAMES = [
@@ -99,11 +104,29 @@ async function fetchSessionUser(): Promise<AuthUser | null> {
       const data = await res.json().catch(() => null);
       const user = data?.user || data?.session?.user || null;
       if (!user || !user.id) return null;
+
+      const id = String(user.id);
+      const nameFromAuth =
+        user.name ?? user.full_name ?? user.user_metadata?.full_name ?? undefined;
+
+      // Upsert у user_profiles — гарантуємо, що рядок існує і full_name
+      // підтягнутий з форми реєстрації. Помилка тут не валить flow —
+      // юзер усе одно залогінений, просто без кастомних полів.
+      let profile = null;
+      try {
+        profile = await ensureUserProfile(id, nameFromAuth);
+      } catch (e) {
+        console.error('ensureUserProfile failed:', e);
+      }
+
       return {
-        id: String(user.id),
+        id,
         email: String(user.email ?? ''),
-        name: user.name ?? user.full_name ?? undefined,
+        name: nameFromAuth,
         emailVerified: user.emailVerified === true,
+        role: profile?.role,
+        full_name: profile?.full_name ?? null,
+        phone: profile?.phone ?? null,
       };
     } catch {
       // try next URL

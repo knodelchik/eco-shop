@@ -8,10 +8,13 @@ import { ensureUserProfile } from '@/lib/user-profile';
  * PATCH /api/profile { userId, full_name?, phone? } — оновити profile
  *
  * Кастомні поля користувача (повне ім'я, телефон, роль) зберігаються
- * у таблиці `user_profiles`. Базові поля (email, тощо) керуються
- * Neon Auth і живуть у `neon_auth.users_sync`. На GET ми lazy-upsert-имо
- * рядок, щоб гарантовано існував — це дозволяє вистравляти role='admin'
- * SQL-ом, не чекаючи на ручне редагування профілю.
+ * у таблиці `user_profiles`. Базові поля (email, password hash) керуються
+ * Neon Auth у власних службових таблицях. На GET ми lazy-upsert-имо
+ * рядок профілю, щоб гарантовано існував — це дозволяє виставляти
+ * role='admin' SQL-ом, не чекаючи на ручне редагування.
+ * Note: основний upsert-хук — у lib/auth-guard.ts:fetchSessionUser
+ * (запускається на кожному session-check). Тут залишили на випадок
+ * прямого виклику /api/profile у обхід session-check.
  */
 export async function GET(request: NextRequest) {
   const userId = new URL(request.url).searchParams.get('userId');
