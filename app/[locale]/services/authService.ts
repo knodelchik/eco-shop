@@ -1,5 +1,29 @@
 import { neonAuth } from '@/lib/neon-auth';
 import { User, AuthFormData } from '../../types/users';
+import { setJwt } from '../../lib/web-auth-token';
+
+/**
+ * Отримує підписаний JWT з нашого /api/auth/sign-in proxy. Викликається
+ * після успіху Neon Auth client SDK — щоб мати другий, server-verifiable
+ * шар auth для /api запитів. Помилка тут не блокує sign-in: фолбек —
+ * soft-auth (userId/email у body/query).
+ */
+async function fetchAndStoreJwt(email: string, password: string): Promise<void> {
+  try {
+    const res = await fetch('/api/auth/sign-in', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (typeof data?.token === 'string' && data.token.split('.').length === 3) {
+      setJwt(data.token);
+    }
+  } catch {
+    // ignore
+  }
+}
 
 /**
  * Auth service — клієнтський, працює напряму з Neon Auth
@@ -25,7 +49,7 @@ export const authService = {
     password: string;
     full_name?: string;
   }) {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+     
     let result: any = null;
     try {
       result = await neonAuth.signUp({
@@ -148,6 +172,8 @@ export const authService = {
             : 'Login failed';
         return { user: null, session: null, error: msg };
       }
+      // Паралельно тягнемо JWT з нашого proxy, не блокуючи sign-in.
+      void fetchAndStoreJwt(email, password);
       return {
         user: (data?.user as unknown as User) ?? null,
         session: data?.session ?? null,
@@ -162,6 +188,9 @@ export const authService = {
   // === ВИХІД ===
   async signOut(): Promise<{ error: string | null }> {
     try {
+      // Чистимо наш JWT перед тим як розлогінити Neon Auth — інакше
+      // якщо це фейлиться, токен залишиться валідним до exp.
+      setJwt(null);
       const { error } = await neonAuth.signOut();
       const msg =
         error && typeof error === 'object' && 'message' in error
@@ -169,6 +198,7 @@ export const authService = {
           : null;
       return { error: msg };
     } catch (e) {
+      setJwt(null);
       return { error: e instanceof Error ? e.message : null };
     }
   },

@@ -3,6 +3,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { format } from 'date-fns';
 import { authService } from '../../services/authService';
+import { authHeaders } from '../../../lib/web-auth-token';
 import {
   Sheet,
   SheetContent,
@@ -78,7 +79,9 @@ export default function AdminOrdersPage() {
       if (user?.id) params.set('actorUserId', user.id);
       if (user?.email) params.set('actorEmail', user.email);
       const qs = params.toString() ? `?${params}` : '';
-      const res = await fetch(`/api/admin/orders${qs}`);
+      const res = await fetch(`/api/admin/orders${qs}`, {
+        headers: authHeaders(),
+      });
       if (res.ok) setOrders(await res.json());
       else toast.error('Помилка завантаження замовлень');
     } catch (e) {
@@ -117,7 +120,7 @@ export default function AdminOrdersPage() {
     const { user } = await authService.getCurrentUser();
     const res = await fetch('/api/admin/orders', {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...authHeaders() },
       body: JSON.stringify({
         id: orderId,
         status: newStatus,
@@ -147,7 +150,7 @@ export default function AdminOrdersPage() {
     const { user } = await authService.getCurrentUser();
     const res = await fetch('/api/admin/orders', {
       method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', ...authHeaders() },
       body: JSON.stringify({
         id: selectedOrder.id,
         notes: `Tracking: ${trackingInput}; Service: ${serviceInput}`,
