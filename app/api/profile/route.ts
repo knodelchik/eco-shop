@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { sql } from '@/lib/neon-db';
 import { requireOwnUser } from '@/lib/auth-guard';
+import { ensureUserProfile } from '@/lib/user-profile';
 
 /**
  * GET   /api/profile?userId=...  — отримати додаткові поля профілю
@@ -8,30 +9,17 @@ import { requireOwnUser } from '@/lib/auth-guard';
  *
  * Кастомні поля користувача (повне ім'я, телефон, роль) зберігаються
  * у таблиці `user_profiles`. Базові поля (email, тощо) керуються
- * Neon Auth і живуть у `neon_auth.users_sync`.
+ * Neon Auth і живуть у `neon_auth.users_sync`. На GET ми lazy-upsert-имо
+ * рядок, щоб гарантовано існував — це дозволяє вистравляти role='admin'
+ * SQL-ом, не чекаючи на ручне редагування профілю.
  */
 export async function GET(request: NextRequest) {
   const userId = new URL(request.url).searchParams.get('userId');
   const auth = await requireOwnUser(userId);
   if (!auth.ok) return NextResponse.json({ error: auth.error }, { status: auth.status });
   try {
-    const rows = await sql`
-      SELECT user_id, full_name, phone, role, created_at, updated_at
-      FROM user_profiles
-      WHERE user_id = ${userId}::uuid
-      LIMIT 1
-    `;
-    const list = rows as Record<string, unknown>[];
-    if (list.length === 0) {
-      // Профілю ще немає — повертаємо порожні значення
-      return NextResponse.json({
-        user_id: userId,
-        full_name: null,
-        phone: null,
-        role: 'user',
-      });
-    }
-    return NextResponse.json(list[0]);
+    const profile = await ensureUserProfile(userId as string);
+    return NextResponse.json(profile);
   } catch (error) {
     console.error('GET /api/profile failed:', error);
     return NextResponse.json({ error: 'Failed' }, { status: 500 });

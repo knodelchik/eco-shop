@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { neonAuth } from '@/lib/neon-auth';
+import { authService } from '../services/authService';
 import AdminSidebar from './AdminSidebar';
 import { Loader2 } from 'lucide-react';
 
+// Email-список як bootstrap-fallback для першого адміна (chicken-and-egg:
+// поки нема жодного admin у БД, вистачає внести email сюди / у Vercel env).
 const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? '')
   .split(',')
   .map((e) => e.trim())
@@ -23,16 +25,20 @@ export default function AdminLayout({
   useEffect(() => {
     const checkUser = async () => {
       try {
-        const { data, error } = await neonAuth.getUser();
-        if (error || !data?.user) {
+        // authService.getCurrentUser() читає role з user_profiles через
+        // /api/profile (а той lazy-upserts рядок при першому виклику).
+        // Так source of truth для ролі — БД, а не env-var.
+        const { user } = await authService.getCurrentUser();
+        if (!user) {
           router.push('/auth');
           return;
         }
 
-        // Спрощена перевірка: якщо ADMIN_EMAILS не задано — пускаємо будь-кого
-        // (для курсової демо). Інакше — лише email зі списку.
-        const userEmail = data.user.email ?? '';
-        if (ADMIN_EMAILS.length > 0 && !ADMIN_EMAILS.includes(userEmail)) {
+        const isAdminByRole = user.role === 'admin';
+        const isAdminByEmail =
+          ADMIN_EMAILS.length > 0 && ADMIN_EMAILS.includes(user.email ?? '');
+
+        if (!isAdminByRole && !isAdminByEmail) {
           router.push('/');
           alert('Доступ заборонено: потрібні права адміна');
           return;
