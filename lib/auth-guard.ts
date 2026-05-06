@@ -146,11 +146,27 @@ export async function getSessionUser(): Promise<AuthUser | null> {
 }
 
 /**
- * Soft-перевірка для курсової:
- *   - Якщо session-cookie немає — 401 (безсумнівно неавторизовано)
- *   - Якщо є cookie і Neon Auth повернув юзера — strict match userId
- *   - Якщо є cookie але Neon Auth не доступний — довіряємо userId
+ * Soft-перевірка для курсової демо.
+ *
+ * Реальність нашого setup:
+ *   - Neon Auth (Better Auth під капотом) сидить на іншому домені, ніж
+ *     наш Next.js. Клієнтський SDK тримає сесію у localStorage (Supabase
+ *     адаптер), а cookie на наш origin не пишеться. Тобто сервер ніколи
+ *     не побачить session-cookie у браузерному запиті.
+ *   - Мобілка шле Bearer-токен (= userId), і це працює.
+ *   - Веб шле просто userId у body.
+ *
+ * Тому контракт такий:
+ *   1. userId у body — обов'язковий (валідний UUID).
+ *   2. Якщо є cookie АБО Bearer і Neon Auth повертає юзера — strict match.
+ *   3. Якщо нічого з цього — довіряємо userId з body (демо-grade).
+ *
+ * У продакшені треба підняти Neon Auth на тому ж origin або генерувати
+ * власний JWT. Зараз — не блокуємо UX курсової.
  */
+const UUID_RE =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 export async function requireOwnUser(
   userIdFromBody: string | null | undefined
 ): Promise<
@@ -160,20 +176,21 @@ export async function requireOwnUser(
   if (!userIdFromBody) {
     return { ok: false, status: 400, error: 'userId required' };
   }
-
-  if (!(await hasAnyAuth())) {
-    return { ok: false, status: 401, error: 'Не авторизовано' };
+  if (!UUID_RE.test(userIdFromBody)) {
+    return { ok: false, status: 400, error: 'userId must be a valid UUID' };
   }
 
-  const user = await fetchSessionUser();
-  if (user) {
-    if (user.id !== userIdFromBody) {
-      return { ok: false, status: 403, error: 'Немає доступу до цих даних' };
+  if (await hasAnyAuth()) {
+    const user = await fetchSessionUser();
+    if (user) {
+      if (user.id !== userIdFromBody) {
+        return { ok: false, status: 403, error: 'Немає доступу до цих даних' };
+      }
+      return { ok: true, user };
     }
-    return { ok: true, user };
   }
 
-  // Soft-fallback: cookie є, але get-session не доступний → довіряємо userId
+  // Демо-fallback: ні cookie ні Bearer не дойшли. Довіряємо userId з body.
   return { ok: true, user: { id: userIdFromBody } };
 }
 

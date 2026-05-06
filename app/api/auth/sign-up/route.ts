@@ -6,6 +6,7 @@
  * "missing or null origin".
  */
 import { NextResponse } from 'next/server';
+import { ensureUserProfile } from '@/lib/user-profile';
 
 export async function POST(req: Request) {
   try {
@@ -59,8 +60,19 @@ export async function POST(req: Request) {
         const emailVerified =
           user?.emailVerified === true || Boolean(user?.email_confirmed_at);
 
+        // Як тільки Neon Auth повернув user.id — створюємо рядок у
+        // user_profiles з name. Не залежить від cookies/session, працює
+        // одразу. Помилка тут не зриває реєстрацію.
+        if (user?.id) {
+          try {
+            await ensureUserProfile(String(user.id), name || null);
+          } catch (e) {
+            console.error('ensureUserProfile after sign-up failed:', e);
+          }
+        }
+
         // Якщо session не видана АБО email ще не підтверджений —
-        // відправляємо мобілку на OTP-екран. Source of truth — тут.
+        // відправляємо клієнт на OTP-екран. Source of truth — тут.
         if (!user?.id || !emailVerified) {
           return NextResponse.json({ needsVerification: true, email });
         }

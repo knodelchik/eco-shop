@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { ensureUserProfile } from '@/lib/user-profile';
 
 /**
  * POST /api/auth/verify-otp { email, otp }
@@ -45,6 +46,19 @@ export async function POST(req: Request) {
         // Витягуємо user з відповіді (формат у Better Auth варіюється)
         const user = data?.user ?? data?.session?.user ?? null;
         const token = user?.id ?? null;
+        const nameFromAuth =
+          user?.name ?? user?.full_name ?? user?.user_metadata?.full_name;
+
+        // Гарантуємо рядок у user_profiles після підтвердження email.
+        // Не залежить від cookies — повертає юзеру коректний full_name.
+        if (user?.id) {
+          try {
+            await ensureUserProfile(String(user.id), nameFromAuth);
+          } catch (e) {
+            console.error('ensureUserProfile after verify-otp failed:', e);
+          }
+        }
+
         return NextResponse.json({
           success: true,
           token,
@@ -52,7 +66,7 @@ export async function POST(req: Request) {
             ? {
                 id: String(user.id),
                 email: String(user.email ?? email),
-                name: user.name ?? user.full_name ?? user.user_metadata?.full_name,
+                name: nameFromAuth,
                 emailVerified: true,
               }
             : null,

@@ -8,6 +8,7 @@
  * Повертає { token, user } для мобільного клієнта.
  */
 import { NextResponse } from 'next/server';
+import { ensureUserProfile } from '@/lib/user-profile';
 
 export async function POST(req: Request) {
   try {
@@ -74,12 +75,24 @@ export async function POST(req: Request) {
             { status: 200 }
           );
         }
+
+        // Backfill user_profiles для існуючих юзерів, які зареєструвалися
+        // до того, як ми почали записувати full_name автоматично. Не блокує
+        // sign-in при помилці.
+        const nameFromAuth =
+          user.name ?? user.full_name ?? user.user_metadata?.full_name;
+        try {
+          await ensureUserProfile(String(user.id), nameFromAuth);
+        } catch (e) {
+          console.error('ensureUserProfile after sign-in failed:', e);
+        }
+
         return NextResponse.json({
           token: String(user.id),
           user: {
             id: String(user.id),
             email: String(user.email ?? email),
-            name: user.name ?? user.full_name ?? user.user_metadata?.full_name,
+            name: nameFromAuth,
             emailVerified: true,
           },
         });
