@@ -61,7 +61,74 @@ export async function GET(request: NextRequest) {
         ? await sql`SELECT * FROM orders ORDER BY created_at DESC LIMIT ${Number(limit)}`
         : await sql`SELECT * FROM orders ORDER BY created_at DESC`;
     }
-    return NextResponse.json(rows);
+
+    const orders = rows as Record<string, unknown>[];
+
+    // Збагачуємо profile-info і items, нормалізуємо до форми, якої очікує
+    // app/[locale]/admin/orders/page.tsx:
+    //   - id як string (там виклик .replace/.toLowerCase)
+    //   - users: { full_name, email, phone } — підтягуємо з user_profiles
+    //   - total_amount — alias на total
+    //   - shipping_type — підтягуємо з jsonb shipping_address
+    //   - order_items: [{ image_url, price, ... }] — alias на product_image/unit_price
+    const userIds = orders
+      .map((o) => o.user_id)
+      .filter((u): u is string => typeof u === 'string' && u.length > 0);
+
+    const profilesRows = userIds.length
+      ? ((await sql`
+          SELECT user_id, full_name, phone
+          FROM user_profiles
+          WHERE user_id = ANY(${userIds}::uuid[])
+        `) as Record<string, unknown>[])
+      : [];
+    const profileById = new Map(profilesRows.map((p) => [String(p.user_id), p]));
+
+    const orderIds = orders.map((o) => o.id);
+    const itemRows = orderIds.length
+      ? ((await sql`
+          SELECT * FROM order_items WHERE order_id = ANY(${orderIds}::bigint[])
+        `) as Record<string, unknown>[])
+      : [];
+
+    const result = orders.map((o) => {
+      const profile = profileById.get(String(o.user_id ?? ''));
+      const shipping =
+        typeof o.shipping_address === 'object' && o.shipping_address !== null
+          ? (o.shipping_address as Record<string, unknown>)
+          : {};
+
+      return {
+        ...o,
+        id: String(o.id),
+        // legacy alias на total для сумісності з UI
+        total_amount: Number(o.total ?? 0),
+        shipping_type: shipping.shipping_type ?? 'Standard',
+        users: {
+          full_name:
+            (profile?.full_name as string | undefined) ??
+            (shipping.full_name as string | undefined) ??
+            (shipping.recipient as string | undefined) ??
+            null,
+          email: o.email,
+          phone:
+            (profile?.phone as string | undefined) ??
+            (shipping.phone as string | undefined) ??
+            null,
+        },
+        order_items: itemRows
+          .filter((i) => Number(i.order_id) === Number(o.id))
+          .map((i) => ({
+            ...i,
+            id: String(i.id),
+            // legacy aliases
+            image_url: i.product_image,
+            price: Number(i.unit_price ?? 0),
+          })),
+      };
+    });
+
+    return NextResponse.json(result);
   } catch (error) {
     console.error('GET /api/admin/orders failed:', error);
     return NextResponse.json({ error: 'Failed' }, { status: 500 });
