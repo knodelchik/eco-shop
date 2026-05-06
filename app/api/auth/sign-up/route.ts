@@ -7,6 +7,7 @@
  */
 import { NextResponse } from 'next/server';
 import { ensureUserProfile } from '@/lib/user-profile';
+import { signJwt } from '@/lib/jwt';
 
 export async function POST(req: Request) {
   try {
@@ -79,8 +80,9 @@ export async function POST(req: Request) {
 
         // Email уже підтверджений (рідкий випадок — OAuth-провайдер) —
         // одразу видаємо token+user
+        const token = await signJwt({ sub: String(user.id) });
         return NextResponse.json({
-          token: String(user.id),
+          token,
           user: {
             id: String(user.id),
             email: String(user.email ?? email),

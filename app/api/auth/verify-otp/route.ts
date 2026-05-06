@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { ensureUserProfile } from '@/lib/user-profile';
+import { signJwt } from '@/lib/jwt';
 
 /**
  * POST /api/auth/verify-otp { email, otp }
@@ -45,7 +46,6 @@ export async function POST(req: Request) {
       if (res.ok) {
         // Витягуємо user з відповіді (формат у Better Auth варіюється)
         const user = data?.user ?? data?.session?.user ?? null;
-        const token = user?.id ?? null;
         const nameFromAuth =
           user?.name ?? user?.full_name ?? user?.user_metadata?.full_name;
 
@@ -58,6 +58,8 @@ export async function POST(req: Request) {
             console.error('ensureUserProfile after verify-otp failed:', e);
           }
         }
+
+        const token = user?.id ? await signJwt({ sub: String(user.id) }) : null;
 
         return NextResponse.json({
           success: true,

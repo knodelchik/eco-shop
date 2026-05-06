@@ -16,6 +16,7 @@
  */
 import { cookies, headers } from 'next/headers';
 import { ensureUserProfile } from '@/lib/user-profile';
+import { verifyJwt } from '@/lib/jwt';
 
 export type AuthUser = {
   id: string;
@@ -61,10 +62,25 @@ async function getBearerToken(): Promise<string | null> {
 }
 
 /**
- * Чи є хоч який-небудь маркер автентифікації — cookie або Bearer-токен.
+ * Якщо у Bearer-заголовку HS256 JWT — повертає user.id з claim `sub`.
+ * Інакше null.
+ */
+async function getUserIdFromBearerJwt(): Promise<string | null> {
+  const token = await getBearerToken();
+  if (!token) return null;
+  // Швидка перевірка формату: jwt = три base64url-частини через крапку.
+  if (token.split('.').length !== 3) return null;
+  const claims = await verifyJwt(token);
+  return claims?.sub ?? null;
+}
+
+/**
+ * Чи є хоч який-небудь маркер автентифікації — cookie, Bearer-токен,
+ * або підписаний JWT (мобілка).
  */
 async function hasAnyAuth(): Promise<boolean> {
   if (await hasSessionCookie()) return true;
+  if (await getUserIdFromBearerJwt()) return true;
   return Boolean(await getBearerToken());
 }
 
@@ -73,6 +89,25 @@ async function hasAnyAuth(): Promise<boolean> {
  * Повертає null, якщо backend не відповідає або сесії немає.
  */
 async function fetchSessionUser(): Promise<AuthUser | null> {
+  // Швидкий шлях для мобілки: JWT у Bearer — sub = user.id, далі тягнемо
+  // профіль з нашої БД, без запиту у Neon Auth (мінус один HTTP hop).
+  const jwtUserId = await getUserIdFromBearerJwt();
+  if (jwtUserId) {
+    let profile = null;
+    try {
+      profile = await ensureUserProfile(jwtUserId);
+    } catch (e) {
+      console.error('ensureUserProfile failed (jwt path):', e);
+    }
+    return {
+      id: jwtUserId,
+      email: '', // email не зберігається у нашій user_profiles — лишаємо порожнім
+      role: profile?.role,
+      full_name: profile?.full_name ?? null,
+      phone: profile?.phone ?? null,
+    };
+  }
+
   const baseUrl = getBaseUrl();
   if (!baseUrl) return null;
 
@@ -206,4 +241,58 @@ export async function requireUser(): Promise<
   }
   const user = await fetchSessionUser();
   return { ok: true, user };
+}
+
+/**
+ * Перевірка для admin-endpoint-ів.
+ *
+ * Source of truth — `user_profiles.role`. Email-allow-list з
+ * `NEXT_PUBLIC_ADMIN_EMAILS` лишений як bootstrap-fallback (першому адміну
+ * рядок у БД може ще не бути виставлений).
+ *
+ * Через soft-auth (cookie може бути відсутній на нашому домені) приймаємо
+ * також userId або email з body/query — у такому разі робимо upsert профілю
+ * та звіряємо role у БД.
+ */
+const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? '')
+  .split(',')
+  .map((e) => e.trim().toLowerCase())
+  .filter(Boolean);
+
+export async function requireAdmin(opts?: {
+  userId?: string | null;
+  email?: string | null;
+}): Promise<
+  | { ok: true; user: AuthUser | { id: string } }
+  | { ok: false; status: number; error: string }
+> {
+  // 1. Якщо є cookie/Bearer — пробуємо canonical session check.
+  if (await hasAnyAuth()) {
+    const user = await fetchSessionUser();
+    if (user) {
+      if (
+        user.role === 'admin' ||
+        (user.email && ADMIN_EMAILS.includes(user.email.toLowerCase()))
+      ) {
+        return { ok: true, user };
+      }
+      return { ok: false, status: 403, error: 'Потрібні права адміна' };
+    }
+  }
+
+  // 2. Soft-fallback: дивимось на ідентифікатор з тіла запиту.
+  if (opts?.userId && UUID_RE.test(opts.userId)) {
+    const profile = await ensureUserProfile(opts.userId).catch(() => null);
+    if (profile?.role === 'admin') {
+      return { ok: true, user: { id: opts.userId } };
+    }
+  }
+  if (opts?.email && ADMIN_EMAILS.includes(opts.email.toLowerCase())) {
+    return {
+      ok: true,
+      user: { id: opts?.userId ?? 'admin-by-email' },
+    };
+  }
+
+  return { ok: false, status: 401, error: 'Не авторизовано' };
 }
