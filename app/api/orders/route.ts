@@ -137,9 +137,45 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Жодного валідного товару' }, { status: 400 });
     }
 
+    // Атомарний декремент стоку: UPDATE поверне лише ті рядки, для яких
+    // stock >= quantity. Якщо повернуло менше — хтось не "встиг" забрати,
+    // або просто немає на складі. Race-windows фактично нема — UPDATE
+    // у Postgres лочить рядок на час свого виконання.
+    const productIds = orderItemsData.map((i) => i.product_id);
+    const quantities = orderItemsData.map((i) => i.quantity);
+
+    const decremented = (await sql`
+      UPDATE products p
+      SET stock = p.stock - x.quantity, updated_at = NOW()
+      FROM unnest(${productIds}::bigint[], ${quantities}::int[]) AS x(id, quantity)
+      WHERE p.id = x.id AND p.stock >= x.quantity
+      RETURNING p.id
+    `) as Record<string, unknown>[];
+
+    if (decremented.length !== orderItemsData.length) {
+      // Часткова невдача: повертаємо назад stock тим, у кого УСПІШНО зняли.
+      // Best-effort — якщо й це впаде, у логах буде видно і адмін розбереться.
+      if (decremented.length > 0) {
+        const restoredIds = decremented.map((d) => Number(d.id));
+        const restoredQtys = restoredIds.map(
+          (id) => orderItemsData.find((i) => i.product_id === id)!.quantity
+        );
+        await sql`
+          UPDATE products p
+          SET stock = p.stock + x.quantity
+          FROM unnest(${restoredIds}::bigint[], ${restoredQtys}::int[]) AS x(id, quantity)
+          WHERE p.id = x.id
+        `.catch((e) => console.error('stock rollback failed:', e));
+      }
+      return NextResponse.json(
+        { error: 'Недостатньо товару на складі' },
+        { status: 409 }
+      );
+    }
+
     const totalUSD = subtotalUSD + shippingCost;
 
-    // Створюємо замовлення
+    // Створюємо замовлення (стоки вже зарезервовані)
     const orderRows = (await sql`
       INSERT INTO orders (user_id, email, status, total, currency, payment_method, shipping_address, notes)
       VALUES (
