@@ -7,16 +7,11 @@ import { ArrowUpRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Product } from '@/app/types/products';
 import WishlistButton from '@/app/Components/WishlistButton';
+import { ProductImage } from '@/app/Components/ProductImage';
+import { getProductImage } from '@/lib/product-image';
 
 const createSlug = (str: string) =>
   str.toLowerCase().trim().replace(/[\s\W-]+/g, '-');
-
-// Градієнт-фон замість фото для кожної категорії
-const CATEGORY_BG: Record<string, string> = {
-  sharpeners: 'linear-gradient(160deg, oklch(0.94 0.03 110) 0%, oklch(0.78 0.14 150) 130%)',
-  stones: 'linear-gradient(200deg, oklch(0.95 0.015 100) 0%, oklch(0.55 0.13 150) 130%)',
-  accessories: 'linear-gradient(140deg, oklch(0.92 0.04 130) 0%, oklch(0.45 0.11 150) 130%)',
-};
 
 const ECO_BADGES = (p: Product) => {
   const out: { label: string; cls: string }[] = [];
@@ -93,18 +88,21 @@ export default function FeaturedProducts() {
               className="bg-card border border-border rounded-2xl overflow-hidden group hover:-translate-y-0.5 hover:shadow-lg transition-all"
             >
               <Link href={`/shop/${createSlug(p.title)}`} className="block">
-                <div
-                  className="aspect-[4/5] overflow-hidden relative"
-                  style={{ background: CATEGORY_BG[p.category] ?? CATEGORY_BG.accessories }}
-                >
-                  <div className="absolute top-3 left-3 flex flex-col gap-1.5">
+                <div className="aspect-[4/5] overflow-hidden relative">
+                  <ProductImage
+                    src={getProductImage(p)}
+                    alt={p.title_uk || p.title}
+                    category={p.category}
+                    sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw"
+                  />
+                  <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
                     {ECO_BADGES(p).map((b) => (
                       <span key={b.label} className={`eco-badge ${b.cls}`}>
                         {b.label}
                       </span>
                     ))}
                   </div>
-                  <div className="absolute top-3 right-3">
+                  <div className="absolute top-3 right-3 z-10">
                     <WishlistButton
                       productId={p.id}
                       size="sm"

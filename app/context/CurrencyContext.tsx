@@ -33,7 +33,7 @@ export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
   // Початкові курси (можете змінити їх на актуальні)
   const [rates, setRates] = useState<Record<Currency, number>>({
     USD: 1,
-    UAH: 42.0, // Приклад курсу
+    UAH: 44.0, // Приклад курсу
     EUR: 0.92,
   });
 

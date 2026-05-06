@@ -4,7 +4,7 @@ import { requireOwnUser } from '@/lib/auth-guard';
 
 /**
  * GET   /api/profile?userId=...  — отримати додаткові поля профілю
- * PATCH /api/profile { userId, full_name?, phone? } — оновити profil
+ * PATCH /api/profile { userId, full_name?, phone? } — оновити profile
  *
  * Кастомні поля користувача (повне ім'я, телефон, роль) зберігаються
  * у таблиці `user_profiles`. Базові поля (email, тощо) керуються

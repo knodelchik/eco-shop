@@ -22,16 +22,12 @@ import { useWishlistStore } from '../../store/wishlistStore';
 import { authService } from '../../services/authService';
 import Price from '@/app/Components/Price';
 import { Product } from '@/app/types/products';
+import { ProductImage } from '@/app/Components/ProductImage';
+import { getProductImages } from '@/lib/product-image';
 
 interface ProductClientProps {
   product: Product;
 }
-
-const CATEGORY_BG: Record<string, string> = {
-  sharpeners: 'linear-gradient(160deg, oklch(0.94 0.03 110) 0%, oklch(0.78 0.14 150) 130%)',
-  stones: 'linear-gradient(200deg, oklch(0.95 0.015 100) 0%, oklch(0.55 0.13 150) 130%)',
-  accessories: 'linear-gradient(140deg, oklch(0.92 0.04 130) 0%, oklch(0.45 0.11 150) 130%)',
-};
 
 type TabId = 'description' | 'composition' | 'shipping' | 'eco';
 
@@ -58,6 +54,8 @@ export default function ProductClient({ product }: ProductClientProps) {
 
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<TabId>('description');
+  const [activeImageIdx, setActiveImageIdx] = useState(0);
+  const galleryImages = getProductImages(product);
   const [userId, setUserId] = useState<string | null>(null);
 
   const { addToCart, cartItems } = useCartStore();
@@ -143,12 +141,15 @@ export default function ProductClient({ product }: ProductClientProps) {
           transition={{ duration: 0.5 }}
           className="lg:sticky lg:top-24 lg:self-start"
         >
-          <div
-            className="aspect-[4/5] rounded-3xl border border-border overflow-hidden relative"
-            style={{ background: CATEGORY_BG[product.category] ?? CATEGORY_BG.accessories }}
-          >
-            {/* Decorative grain / pattern hint — minimal */}
-            <div className="absolute top-5 left-5 flex flex-col gap-1.5">
+          <div className="aspect-[4/5] rounded-3xl border border-border overflow-hidden relative">
+            <ProductImage
+              src={galleryImages[activeImageIdx]}
+              alt={product.title_uk || product.title}
+              category={product.category}
+              priority
+              sizes="(min-width: 1024px) 50vw, 100vw"
+            />
+            <div className="absolute top-5 left-5 flex flex-col gap-1.5 z-10">
               {ecoBadges.map((b) => (
                 <span key={b.label} className={`eco-badge ${b.cls}`}>
                   {b.label}
@@ -157,19 +158,34 @@ export default function ProductClient({ product }: ProductClientProps) {
             </div>
           </div>
 
-          {/* Thumbnails — 4 small variants */}
-          <div className="grid grid-cols-4 gap-2 mt-2">
-            {[0, 1, 2, 3].map((i) => (
-              <button
-                key={i}
-                className={`aspect-square rounded-xl border overflow-hidden transition-all ${
-                  i === 0 ? 'border-primary ring-2 ring-primary/30' : 'border-border opacity-60 hover:opacity-100'
-                }`}
-                style={{ background: CATEGORY_BG[product.category] ?? CATEGORY_BG.accessories, filter: i === 0 ? 'none' : `hue-rotate(${i * 25}deg)` }}
-                aria-label={`Image ${i + 1}`}
-              />
-            ))}
-          </div>
+          {/* Thumbnails — реальні фото товара (або placeholder-варіації якщо їх менше). */}
+          {galleryImages.length > 1 && (
+            <div className="grid grid-cols-4 gap-2 mt-2">
+              {galleryImages.slice(0, 4).map((img, i) => {
+                const active = i === activeImageIdx;
+                return (
+                  <button
+                    key={`${img}-${i}`}
+                    type="button"
+                    onClick={() => setActiveImageIdx(i)}
+                    className={`aspect-square rounded-xl border overflow-hidden transition-all relative ${
+                      active
+                        ? 'border-primary ring-2 ring-primary/30'
+                        : 'border-border opacity-60 hover:opacity-100'
+                    }`}
+                    aria-label={`Image ${i + 1}`}
+                  >
+                    <ProductImage
+                      src={img}
+                      alt={`${product.title} — thumbnail ${i + 1}`}
+                      category={product.category}
+                      sizes="120px"
+                    />
+                  </button>
+                );
+              })}
+            </div>
+          )}
         </motion.div>
 
         {/* Info */}

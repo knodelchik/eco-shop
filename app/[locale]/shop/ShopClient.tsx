@@ -9,6 +9,8 @@ import { Search, X, SlidersHorizontal } from 'lucide-react';
 import { Product } from '../../types/products';
 import Price from '@/app/Components/Price';
 import WishlistButton from '@/app/Components/WishlistButton';
+import { ProductImage } from '@/app/Components/ProductImage';
+import { getProductImage } from '@/lib/product-image';
 
 type Category = 'all' | 'sharpeners' | 'stones' | 'accessories';
 type SortKey = 'newest' | 'price-asc' | 'price-desc' | 'popular';
@@ -16,12 +18,6 @@ type SortKey = 'newest' | 'price-asc' | 'price-desc' | 'popular';
 interface ShopClientProps {
   initialProducts: Product[];
 }
-
-const CATEGORY_BG: Record<string, string> = {
-  sharpeners: 'linear-gradient(160deg, oklch(0.94 0.03 110) 0%, oklch(0.78 0.14 150) 130%)',
-  stones: 'linear-gradient(200deg, oklch(0.95 0.015 100) 0%, oklch(0.55 0.13 150) 130%)',
-  accessories: 'linear-gradient(140deg, oklch(0.92 0.04 130) 0%, oklch(0.45 0.11 150) 130%)',
-};
 
 export default function ShopClient({ initialProducts }: ShopClientProps) {
   const t = useTranslations('Shop');
@@ -309,18 +305,21 @@ function ProductCard({ product, index }: { product: Product; index: number }) {
         href={`/shop/${product.title.replace(/\s+/g, '-').toLowerCase()}`}
         className="block"
       >
-        <div
-          className="aspect-[4/5] relative overflow-hidden"
-          style={{ background: CATEGORY_BG[product.category] ?? CATEGORY_BG.accessories }}
-        >
-          <div className="absolute top-3 left-3 flex flex-col gap-1.5">
+        <div className="aspect-[4/5] relative overflow-hidden">
+          <ProductImage
+            src={getProductImage(product)}
+            alt={displayTitle}
+            category={product.category}
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+          />
+          <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
             {ecoBadges.map((b) => (
               <span key={b.label} className={`eco-badge ${b.cls}`}>
                 {b.label}
               </span>
             ))}
           </div>
-          <div className="absolute top-3 right-3">
+          <div className="absolute top-3 right-3 z-10">
             <WishlistButton
               productId={product.id}
               size="sm"
