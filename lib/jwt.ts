@@ -1,23 +1,8 @@
-/**
- * Мінімальний HS256 JWT — sign + verify, без зовнішніх залежностей.
- *
- * Чому свій код, а не jsonwebtoken: jsonwebtoken тягне cjs-залежності, які
- * у Next/edge runtime ламаються. WebCrypto доступний скрізь (Node 18+,
- * edge, Vercel) — лишаємо проєкт runtime-agnostic.
- *
- * Використовуємо лише два claim-и:
- *   - sub  — user.id (для requireOwnUser/getSessionUser)
- *   - exp  — Unix-секунди до якого токен валідний (default 30 днів)
- *
- * Secret береться з env JWT_SECRET. Якщо secret не сконфігурований —
- * `signJwt` кидає помилку; `verifyJwt` повертає null. Відсутність secret
- * у проді = невидана JWT, що блокує auth.
- */
 import 'server-only';
 
 const ALG_HEADER = { alg: 'HS256', typ: 'JWT' };
 const TEXT_ENCODER = new TextEncoder();
-const DEFAULT_TTL_SECONDS = 60 * 60 * 24 * 30; // 30 днів
+const DEFAULT_TTL_SECONDS = 60 * 60 * 24 * 30; 
 
 function base64UrlEncode(input: ArrayBuffer | string): string {
   const bytes =
@@ -61,7 +46,7 @@ async function hmacSign(message: string, secret: string): Promise<string> {
 }
 
 export interface JwtPayload {
-  sub: string; // user.id
+  sub: string; 
   exp?: number;
   iat?: number;
 }
@@ -112,7 +97,6 @@ export async function verifyJwt(token: string): Promise<JwtPayload | null> {
   }
 }
 
-/** Constant-time string compare. */
 function timingSafeEqual(a: string, b: string): boolean {
   if (a.length !== b.length) return false;
   let diff = 0;

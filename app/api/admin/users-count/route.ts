@@ -2,13 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { sql } from '@/lib/neon-db';
 import { requireAdmin } from '@/lib/auth-guard';
 
-/**
- * GET /api/admin/users-count — кількість користувачів у БД.
- *
- * Рахуємо за нашою `user_profiles` бо ця таблиця гарантовано існує і
- * заповнюється авто-апсертом у lib/auth-guard.ts при кожному session-check.
- * Кількість = юзери, які хоч раз заходили після останнього деплою.
- */
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const auth = await requireAdmin({

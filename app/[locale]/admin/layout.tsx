@@ -6,8 +6,6 @@ import { authService } from '../services/authService';
 import AdminSidebar from './AdminSidebar';
 import { Loader2 } from 'lucide-react';
 
-// Email-список як bootstrap-fallback для першого адміна (chicken-and-egg:
-// поки нема жодного admin у БД, вистачає внести email сюди / у Vercel env).
 const ADMIN_EMAILS = (process.env.NEXT_PUBLIC_ADMIN_EMAILS ?? '')
   .split(',')
   .map((e) => e.trim())
@@ -25,9 +23,6 @@ export default function AdminLayout({
   useEffect(() => {
     const checkUser = async () => {
       try {
-        // authService.getCurrentUser() читає role з user_profiles через
-        // /api/profile (а той lazy-upserts рядок при першому виклику).
-        // Так source of truth для ролі — БД, а не env-var.
         const { user } = await authService.getCurrentUser();
         if (!user) {
           router.push('/auth');
@@ -64,7 +59,6 @@ export default function AdminLayout({
     );
   }
 
-  // Якщо перевірка пройшла (або ми її пропустили), показуємо адмінку
   if (!authorized) return null;
 
   return (

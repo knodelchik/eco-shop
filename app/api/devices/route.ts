@@ -2,22 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { sql } from '@/lib/neon-db';
 import { requireOwnUser } from '@/lib/auth-guard';
 
-/**
- * Реєстрація мобільного пристрою для push-нотифікацій.
- *
- * POST   /api/devices  { userId, expoPushToken, platform: 'ios'|'android' }
- * DELETE /api/devices  { userId, expoPushToken }
- *
- * Pre-condition: таблиця user_devices повинна існувати:
- *   CREATE TABLE user_devices (
- *     id BIGSERIAL PRIMARY KEY,
- *     user_id UUID NOT NULL,
- *     expo_push_token TEXT NOT NULL,
- *     platform TEXT,
- *     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
- *     UNIQUE (user_id, expo_push_token)
- *   );
- */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();

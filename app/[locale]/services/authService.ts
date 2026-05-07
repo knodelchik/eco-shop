@@ -2,12 +2,6 @@ import { neonAuth } from '@/lib/neon-auth';
 import { User, AuthFormData } from '../../types/users';
 import { setJwt } from '../../lib/web-auth-token';
 
-/**
- * Отримує підписаний JWT з нашого /api/auth/sign-in proxy. Викликається
- * після успіху Neon Auth client SDK — щоб мати другий, server-verifiable
- * шар auth для /api запитів. Помилка тут не блокує sign-in: фолбек —
- * soft-auth (userId/email у body/query).
- */
 async function fetchAndStoreJwt(email: string, password: string): Promise<void> {
   try {
     const res = await fetch('/api/auth/sign-in', {
@@ -25,21 +19,9 @@ async function fetchAndStoreJwt(email: string, password: string): Promise<void> 
   }
 }
 
-/**
- * Auth service — клієнтський, працює напряму з Neon Auth
- * через Supabase-сумісний адаптер. API максимально подібне до старого.
- */
 export const authService = {
-  // Експорт клієнта Neon Auth для onAuthStateChange та інших викликів
-  // (структура така, як раніше, тому код-споживач не змінюється)
   supabase: { auth: neonAuth },
 
-  // === РЕЄСТРАЦІЯ ===
-  // Викликається напряму з клієнта.
-  // Якщо у Neon Auth email-verification увімкнено, але лист не приходить —
-  // одразу пробуємо залогінити користувача тими ж credentials, щоб він не
-  // застряг на «чекаємо лист». Якщо verification справді блокує login —
-  // повертаємо undefined session і клієнт показує "Перевірте пошту" екран.
   async signUp({
     email,
     password,
@@ -64,11 +46,7 @@ export const authService = {
         },
       });
     } catch (e) {
-      // Better Auth інколи кидає виключення на signUp коли email-verification
-      // увімкнено (бо session недоступна). Це не помилка — продовжуємо
-      // з потоком verification.
       const msg = e instanceof Error ? e.message : '';
-      // Якщо помилка — про дублікат email, повідомляємо явно
       if (msg.toLowerCase().includes('already') || msg.toLowerCase().includes('exists')) {
         return {
           user: null,
@@ -76,8 +54,6 @@ export const authService = {
           error: 'Користувач з таким email вже зареєстрований',
         };
       }
-      // Якщо це "Failed to retrieve user session" / "no session" — це OK,
-      // йдемо на verification flow
       if (msg.includes('session') || msg.includes('verify')) {
         return {
           user: null,
@@ -87,7 +63,6 @@ export const authService = {
           email,
         };
       }
-      // Інші помилки — повертаємо назад
       return {
         user: null,
         session: null,
@@ -103,9 +78,6 @@ export const authService = {
           ? String((error as { message: unknown }).message)
           : 'Sign up failed';
 
-      // ВАЖЛИВО: "Failed to retrieve user session" / "verify your email"
-      // — це НЕ помилка. Це сигнал від Better Auth що email
-      // потрібно підтвердити OTP-кодом.
       if (/session|verify|verification|email/i.test(msg) &&
           !/already|exists|registered/i.test(msg)) {
         return {
@@ -117,7 +89,6 @@ export const authService = {
         };
       }
 
-      // Дублікат — окрема message
       if (/already|exists|registered/i.test(msg)) {
         return {
           user: null,
@@ -133,7 +104,6 @@ export const authService = {
     const session = data?.session;
     const emailVerified = user?.emailVerified === true || user?.email_confirmed_at;
 
-    // Якщо email уже верифікований і є сесія — все добре.
     if (session && emailVerified && user?.id) {
       try {
         await fetch('/api/profile', {
@@ -147,7 +117,6 @@ export const authService = {
       return { user, session, error: null };
     }
 
-    // Інакше — потрібна OTP-верифікація.
     return {
       user: user ?? null,
       session: null,
@@ -157,7 +126,6 @@ export const authService = {
     };
   },
 
-  // === ВХІД ===
   async signIn({ email, password }: AuthFormData): Promise<{
     user: User | null;
     session: unknown;
@@ -172,7 +140,6 @@ export const authService = {
             : 'Login failed';
         return { user: null, session: null, error: msg };
       }
-      // Паралельно тягнемо JWT з нашого proxy, не блокуючи sign-in.
       void fetchAndStoreJwt(email, password);
       return {
         user: (data?.user as unknown as User) ?? null,
@@ -185,11 +152,8 @@ export const authService = {
     }
   },
 
-  // === ВИХІД ===
   async signOut(): Promise<{ error: string | null }> {
     try {
-      // Чистимо наш JWT перед тим як розлогінити Neon Auth — інакше
-      // якщо це фейлиться, токен залишиться валідним до exp.
       setJwt(null);
       const { error } = await neonAuth.signOut();
       const msg =
@@ -203,7 +167,6 @@ export const authService = {
     }
   },
 
-  // === ОТРИМАННЯ ПОТОЧНОГО КОРИСТУВАЧА ===
   async getCurrentUser(): Promise<{ user: User | null; error: string | null }> {
     try {
       const { data, error } = await neonAuth.getUser();
@@ -220,7 +183,6 @@ export const authService = {
       const user = u as Record<string, unknown>;
       const userId = String(user.id);
 
-      // Тягнемо кастомні поля (full_name, phone, role) з user_profiles
       let profile: { full_name?: string; phone?: string; role?: string } = {};
       try {
         const res = await fetch(`/api/profile?userId=${encodeURIComponent(userId)}`);
@@ -251,15 +213,9 @@ export const authService = {
     }
   },
 
-  // === ПРОФІЛЬ ===
-  // Базові поля керуються Neon Auth, але змінювати їх з клієнта
-  // прямо не можна. Для додаткових полів (full_name, phone) — використовуйте
-  // updateUser нижче, який оновлює metadata.
   async getUserProfile(
     userId: string
   ): Promise<{ profile: User | null; error: string | null }> {
-    // Простіше — повернути поточного юзера, бо у Neon Auth немає окремого
-    // public.users з RLS. Перевіряємо що ми за нього.
     const { user, error } = await this.getCurrentUser();
     if (error || !user) return { profile: null, error: error };
     if (user.id !== userId) {
@@ -273,7 +229,6 @@ export const authService = {
     updates: Partial<User>
   ): Promise<{ profile: User | null; error: string | null }> {
     try {
-      // 1. Кастомні поля (повне ім'я, телефон) — у нашій таблиці user_profiles
       const res = await fetch('/api/profile', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
@@ -288,7 +243,6 @@ export const authService = {
         return { profile: null, error: data.error || 'Не вдалося оновити профіль' };
       }
 
-      // 2. Якщо потрібно — зберігаємо name також у Neon Auth (стандартне поле)
       if (updates.full_name) {
         try {
           await neonAuth.updateUser({ data: { name: updates.full_name } });
@@ -304,8 +258,6 @@ export const authService = {
     }
   },
 
-  // === ВІДНОВЛЕННЯ ПАРОЛЮ ===
-  // Працює напряму з клієнта (Better Auth потребує origin).
   async resetPasswordForEmail(
     email: string,
     lang?: string
@@ -334,7 +286,6 @@ export const authService = {
     }
   },
 
-  // === ОНОВЛЕННЯ ПАРОЛЮ ===
   async updatePassword(newPassword: string): Promise<{ error: string | null }> {
     try {
       const { error } = await neonAuth.updateUser({ password: newPassword });
@@ -348,7 +299,6 @@ export const authService = {
     }
   },
 
-  // === ПОВТОРНЕ ПІДТВЕРДЖЕННЯ ПОШТИ ===
   async resendVerificationEmail(
     email: string,
     lang?: string

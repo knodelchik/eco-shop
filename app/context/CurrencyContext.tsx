@@ -24,20 +24,17 @@ const CurrencyContext = createContext<CurrencyContextType | undefined>(
 );
 
 export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
-  // 1. Отримуємо параметри URL прямо тут. Це забезпечує миттєву реакцію на зміну мови.
   const params = useParams();
   const locale = (params?.locale as string) || 'uk';
 
   const [currency, setCurrency] = useState<Currency>('UAH');
 
-  // Початкові курси (можете змінити їх на актуальні)
   const [rates, setRates] = useState<Record<Currency, number>>({
     USD: 1,
     UAH: 44.0, // Приклад курсу
     EUR: 0.92,
   });
 
-  // 2. Цей ефект слідкує за зміною мови в URL
   useEffect(() => {
     if (locale === 'uk') {
       setCurrency('UAH');
@@ -46,7 +43,6 @@ export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
     }
   }, [locale]);
 
-  // Спробуємо завантажити курси з API (якщо у вас є endpoint), якщо ні - залишаться дефолтні
   useEffect(() => {
     const fetchRates = async () => {
       try {
@@ -56,7 +52,6 @@ export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
           setRates(data);
         }
       } catch (e) {
-        // Якщо API немає, просто ігноруємо помилку, працюватиме на дефолтних курсах
         console.warn('Currency API not available, using default rates');
       }
     };
@@ -70,8 +65,6 @@ export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const formatPrice = (priceInUsd: number) => {
-    // Захист від undefined/null/NaN у вхідних даних — повертаємо «—»
-    // замість «NaN ₴» що ламає UI замовлень.
     const safe = Number(priceInUsd);
     if (!Number.isFinite(safe)) return '—';
 

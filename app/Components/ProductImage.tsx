@@ -1,17 +1,5 @@
 'use client';
 
-/**
- * ProductImage — єдиний компонент для зображення товару у каталозі/деталі.
- *
- * Логіка:
- *   1. Якщо у товара є images[i] → рендеримо next/image з ним.
- *   2. Якщо немає або трапився onError → показуємо category-градієнт як fallback
- *      (раніше веб всюди рендерив тільки градієнти — лишаємо їх як safety net,
- *       щоб порожніх блоків не було).
- *
- * Використання — у FeaturedProducts, ShopClient (картка), ProductClient
- * (main + thumbnails).
- */
 import Image from 'next/image';
 import { useMemo, useState } from 'react';
 import { ProductCategory } from '@/app/types/products';
@@ -26,11 +14,8 @@ interface ProductImageProps {
   src?: string | null;
   alt: string;
   category?: ProductCategory | string;
-  /** Hue-rotate у градусах для thumbnails-варіацій коли реальної картинки нема. */
   hueRotate?: number;
-  /** sizes для responsive next/image. */
   sizes?: string;
-  /** Якщо true — не ставимо next/image priority (default false). */
   priority?: boolean;
   className?: string;
 }

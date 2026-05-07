@@ -1,10 +1,3 @@
-/**
- * POST /api/auth/sign-up   { email, password, name? }
- *
- * Mobile-friendly proxy для Neon Auth (Better Auth) email-password sign-up.
- * Робить direct fetch з явним Origin — Better Auth інакше кидає
- * "missing or null origin".
- */
 import { NextResponse } from 'next/server';
 import { ensureUserProfile } from '@/lib/user-profile';
 import { signJwt } from '@/lib/jwt';
@@ -61,9 +54,6 @@ export async function POST(req: Request) {
         const emailVerified =
           user?.emailVerified === true || Boolean(user?.email_confirmed_at);
 
-        // Як тільки Neon Auth повернув user.id — створюємо рядок у
-        // user_profiles з name. Не залежить від cookies/session, працює
-        // одразу. Помилка тут не зриває реєстрацію.
         if (user?.id) {
           try {
             await ensureUserProfile(String(user.id), name || null);
@@ -72,14 +62,10 @@ export async function POST(req: Request) {
           }
         }
 
-        // Якщо session не видана АБО email ще не підтверджений —
-        // відправляємо клієнт на OTP-екран. Source of truth — тут.
         if (!user?.id || !emailVerified) {
           return NextResponse.json({ needsVerification: true, email });
         }
 
-        // Email уже підтверджений (рідкий випадок — OAuth-провайдер) —
-        // одразу видаємо token+user
         const token = await signJwt({ sub: String(user.id) });
         return NextResponse.json({
           token,
@@ -92,7 +78,6 @@ export async function POST(req: Request) {
         });
       }
 
-      // 409/400 на дублікат
       const msg = data?.message ?? '';
       if (/already|exists|registered/i.test(String(msg))) {
         return NextResponse.json(
@@ -101,7 +86,6 @@ export async function POST(req: Request) {
         );
       }
 
-      // Email verification flow — Better Auth кидає 400 з "verify email"
       if (/session|verify|verification/i.test(String(msg))) {
         return NextResponse.json({ needsVerification: true, email });
       }

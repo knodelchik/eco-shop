@@ -44,7 +44,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Немає адреси доставки' }, { status: 400 });
     }
 
-    // Беремо актуальні ціни з БД
     const itemIds = items.map((i) => i.id);
     const dbProducts = await sql`
       SELECT id, price, title, images, stock FROM products
@@ -88,8 +87,6 @@ export async function POST(req: Request) {
       });
     }
 
-    // Доставка — спочатку дивимось у delivery_settings за country_code,
-    // якщо рядка нема (або не вказано country_code) — fallback на flat-rate.
     const countryCode = String(
       (shippingAddress.country_code as string | undefined) ?? ''
     ).trim().toUpperCase();
@@ -112,13 +109,11 @@ export async function POST(req: Request) {
           }
         }
       } catch (e) {
-        // Якщо delivery_settings таблиці нема — мовчимо, fallback вже виставлений
         console.warn('delivery_settings lookup failed, using flat-rate:', e);
       }
     }
     const finalAmountUSD = calculatedTotalUSD + shippingCost;
 
-    // Створюємо замовлення в Neon
     const userId = (shippingAddress.user_id as string) ?? null;
     const email = (shippingAddress.email as string) ?? '';
     const methodForDb = method === 'fondy' ? 'monobank' : method;
@@ -150,7 +145,6 @@ export async function POST(req: Request) {
       `;
     }
 
-    // ===== PAYPAL =====
     if (method === 'paypal') {
       const accessToken = await generateAccessToken();
       const payload = {
@@ -188,7 +182,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ id: orderData.id, internalOrderId: orderId });
     }
 
-    // ===== MONOBANK =====
     const rate = await getExchangeRate();
     const amountInCents = Math.round(finalAmountUSD * rate * 100);
     const productsNames = orderItemsData

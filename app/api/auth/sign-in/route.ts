@@ -1,12 +1,3 @@
-/**
- * POST /api/auth/sign-in   { email, password }
- *
- * Mobile-friendly proxy для Neon Auth (Better Auth) email-password sign-in.
- * Робить direct fetch на Neon Auth REST API з ЯВНИМ Origin-хедером —
- * інакше Better Auth кидає "missing or null origin".
- *
- * Повертає { token, user } для мобільного клієнта.
- */
 import { NextResponse } from 'next/server';
 import { ensureUserProfile } from '@/lib/user-profile';
 import { signJwt } from '@/lib/jwt';
@@ -32,14 +23,11 @@ export async function POST(req: Request) {
       );
     }
 
-    // Origin для Better Auth — наш власний домен. Беремо з Vercel-env або з headers.
     const origin =
       process.env.NEXT_PUBLIC_BASE_URL ??
       req.headers.get('origin') ??
       `https://${req.headers.get('host')}`;
 
-    // Better Auth може мати ендпоінт або без префіксу, або з /api/auth.
-    // Пробуємо обидва варіанти.
     const candidates = [
       `${baseUrl}/sign-in/email`,
       `${baseUrl}/api/auth/sign-in/email`,
@@ -77,9 +65,6 @@ export async function POST(req: Request) {
           );
         }
 
-        // Backfill user_profiles для існуючих юзерів, які зареєструвалися
-        // до того, як ми почали записувати full_name автоматично. Не блокує
-        // sign-in при помилці.
         const nameFromAuth =
           user.name ?? user.full_name ?? user.user_metadata?.full_name;
         try {
@@ -88,9 +73,6 @@ export async function POST(req: Request) {
           console.error('ensureUserProfile after sign-in failed:', e);
         }
 
-        // Видаємо підписаний JWT (HS256, JWT_SECRET у env). Старі клієнти
-        // з token=userId більше не вважаються авторизованими — їм треба
-        // переавторизуватися (це навмисно, бо userId-як-token небезпечно).
         const token = await signJwt({ sub: String(user.id) });
 
         return NextResponse.json({
@@ -106,8 +88,6 @@ export async function POST(req: Request) {
 
       if (res.status !== 404) {
         const errMsg = String(data?.message ?? '');
-        // Better Auth повертає 401/403 з "email not verified" — це не помилка,
-        // а сигнал перейти на OTP-екран
         if (/verif|confirm/i.test(errMsg)) {
           return NextResponse.json(
             { needsVerification: true, email },

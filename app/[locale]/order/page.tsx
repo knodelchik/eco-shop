@@ -3,7 +3,7 @@
 import { useCartStore } from '../store/cartStore';
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import { useTranslations, useLocale } from 'next-intl'; // ✅ 1. Додали useLocale
+import { useTranslations, useLocale } from 'next-intl'; 
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from '@/navigation';
 import { authService } from '../services/authService';
@@ -30,7 +30,7 @@ const createSlug = (str: string) =>
 
 export default function OrderPage() {
   const t = useTranslations('Order');
-  const locale = useLocale(); // ✅ 2. Отримуємо поточну мову
+  const locale = useLocale(); 
   
   const { cartItems } = useCartStore();
   const { formatPrice, rates } = useCurrency();
@@ -54,7 +54,6 @@ export default function OrderPage() {
   );
   const [shippingCost, setShippingCost] = useState(0);
 
-  // --- Завантаження даних ---
   useEffect(() => {
     const initData = async () => {
       setLoading(true);
@@ -69,9 +68,6 @@ export default function OrderPage() {
           setSelectedAddressId(defaultAddr.id);
         }
       }
-      // Тарифи доставки тягнемо з /api/delivery (публічний read).
-      // Якщо таблиця delivery_settings порожня або не створена — масив
-      // буде [], клієнт автоматично падає на flat-rate $5/$10.
       try {
         const res = await fetch('/api/delivery');
         if (res.ok) {
@@ -88,8 +84,6 @@ export default function OrderPage() {
     initData();
   }, []);
 
-  // --- Розрахунок доставки ---
-  // Шукаємо тариф для country_code з deliverySettings; якщо нема — flat-rate.
   const calculateShippingPrice = (
     countryCode: string,
     type: 'Standard' | 'Express'
@@ -141,7 +135,6 @@ export default function OrderPage() {
   const standardCost = getCostForUI('Standard');
   const expressCost = getCostForUI('Express');
 
-  // --- Валідація перед оплатою ---
   const validateOrder = () => {
     if (!user) {
       toast.error(t('errorAuth'));
@@ -158,7 +151,6 @@ export default function OrderPage() {
     return true;
   };
 
-  // --- Логіка оплати MONOBANK ---
   const handleMonobankPayment = async () => {
     if (!validateOrder()) return;
 
@@ -233,7 +225,7 @@ export default function OrderPage() {
                     index={index}
                     formatPrice={formatPrice}
                     t={t}
-                    locale={locale} // ✅ 3. Передаємо locale
+                    locale={locale} 
                   />
                 ))}
               </AnimatePresence>
@@ -622,7 +614,6 @@ export default function OrderPage() {
   );
 }
 
-// === Cart Components ===
 function CartItem({ item, index, formatPrice, t, locale }: any) {
   const slug = createSlug(item.title);
   return (

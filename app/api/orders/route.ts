@@ -2,16 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { sql } from '@/lib/neon-db';
 import { requireOwnUser } from '@/lib/auth-guard';
 
-/**
- * GET /api/orders?userId=...   — замовлення користувача
- *                                (для адмінки можна зробити окремий /api/admin/orders)
- *
- * POST /api/orders             — створення замовлення без платіжного шлюзу.
- *                                Використовується мобільним клієнтом для
- *                                Cash on Delivery / накладеного платежу.
- *                                Платіжні провайдери (PayPal, Monobank) йдуть
- *                                через окремий /api/create-payment.
- */
 export async function GET(request: NextRequest) {
   const userId = new URL(request.url).searchParams.get('userId');
   const auth = await requireOwnUser(userId);
@@ -24,7 +14,6 @@ export async function GET(request: NextRequest) {
       ORDER BY created_at DESC
     `;
 
-    // Завантажуємо позиції одним запитом
     const orderIds = (orders as Record<string, unknown>[]).map((o) => o.id);
     let items: Record<string, unknown>[] = [];
     if (orderIds.length > 0) {
@@ -34,8 +23,6 @@ export async function GET(request: NextRequest) {
       items = itemRows as Record<string, unknown>[];
     }
 
-    // Збираємо в один масив з вкладеними items + legacy aliases для UI:
-    // image_url ← product_image, price ← unit_price, shipping_type/cost зі jsonb.
     const result = (orders as Record<string, unknown>[]).map((o) => {
       const shipping =
         typeof o.shipping_address === 'object' && o.shipping_address !== null
@@ -44,7 +31,6 @@ export async function GET(request: NextRequest) {
       return {
         ...o,
         id: String(o.id),
-        // legacy alias на total для UI, що ще читає total_amount
         total_amount: Number(o.total ?? 0),
         shipping_type: shipping.shipping_type ?? 'Standard',
         shipping_cost: Number(shipping.shipping_cost ?? 0),
@@ -110,7 +96,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'shippingAddress required' }, { status: 400 });
     }
 
-    // Беремо актуальні ціни з БД — не довіряємо клієнту
     const itemIds = items.map((i) => Number(i.id));
     const dbProducts = (await sql`
       SELECT id, price, title, images, stock FROM products
@@ -156,10 +141,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Жодного валідного товару' }, { status: 400 });
     }
 
-    // Атомарний декремент стоку: UPDATE поверне лише ті рядки, для яких
-    // stock >= quantity. Якщо повернуло менше — хтось не "встиг" забрати,
-    // або просто немає на складі. Race-windows фактично нема — UPDATE
-    // у Postgres лочить рядок на час свого виконання.
     const productIds = orderItemsData.map((i) => i.product_id);
     const quantities = orderItemsData.map((i) => i.quantity);
 
@@ -172,8 +153,6 @@ export async function POST(request: NextRequest) {
     `) as Record<string, unknown>[];
 
     if (decremented.length !== orderItemsData.length) {
-      // Часткова невдача: повертаємо назад stock тим, у кого УСПІШНО зняли.
-      // Best-effort — якщо й це впаде, у логах буде видно і адмін розбереться.
       if (decremented.length > 0) {
         const restoredIds = decremented.map((d) => Number(d.id));
         const restoredQtys = restoredIds.map(
@@ -194,7 +173,6 @@ export async function POST(request: NextRequest) {
 
     const totalUSD = subtotalUSD + shippingCost;
 
-    // Створюємо замовлення (стоки вже зарезервовані)
     const orderRows = (await sql`
       INSERT INTO orders (user_id, email, status, total, currency, payment_method, shipping_address, notes)
       VALUES (

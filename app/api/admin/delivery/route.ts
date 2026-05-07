@@ -2,25 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { sql } from '@/lib/neon-db';
 import { requireAdmin } from '@/lib/auth-guard';
 
-/**
- * Управління тарифами доставки за країною.
- *
- * Pre-condition: таблиця delivery_settings:
- *   CREATE TABLE delivery_settings (
- *     id BIGSERIAL PRIMARY KEY,
- *     country_code TEXT NOT NULL UNIQUE,
- *     country_name TEXT NOT NULL,
- *     standard_price NUMERIC(10,2) NOT NULL DEFAULT 5,
- *     express_price NUMERIC(10,2) NOT NULL DEFAULT 10,
- *     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
- *     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
- *   );
- *
- * GET    /api/admin/delivery                         — список усіх тарифів
- * POST   /api/admin/delivery  { country_code, country_name, standard_price, express_price }
- *                                                    — upsert
- * DELETE /api/admin/delivery  { country_code }       — видалити
- */
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const auth = await requireAdmin({

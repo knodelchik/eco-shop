@@ -3,19 +3,6 @@ import { sql } from '@/lib/neon-db';
 import { requireOwnUser } from '@/lib/auth-guard';
 import { ensureUserProfile } from '@/lib/user-profile';
 
-/**
- * GET   /api/profile?userId=...  — отримати додаткові поля профілю
- * PATCH /api/profile { userId, full_name?, phone? } — оновити profile
- *
- * Кастомні поля користувача (повне ім'я, телефон, роль) зберігаються
- * у таблиці `user_profiles`. Базові поля (email, password hash) керуються
- * Neon Auth у власних службових таблицях. На GET ми lazy-upsert-имо
- * рядок профілю, щоб гарантовано існував — це дозволяє виставляти
- * role='admin' SQL-ом, не чекаючи на ручне редагування.
- * Note: основний upsert-хук — у lib/auth-guard.ts:fetchSessionUser
- * (запускається на кожному session-check). Тут залишили на випадок
- * прямого виклику /api/profile у обхід session-check.
- */
 export async function GET(request: NextRequest) {
   const userId = new URL(request.url).searchParams.get('userId');
   const auth = await requireOwnUser(userId);
@@ -34,7 +21,6 @@ export async function PATCH(request: NextRequest) {
     const { userId, full_name, phone } = await request.json();
     const auth = await requireOwnUser(userId);
     if (!auth.ok) return NextResponse.json({ error: auth.error }, { status: auth.status });
-    // UPSERT — створює запис, якщо його ще не було, або оновлює
     await sql`
       INSERT INTO user_profiles (user_id, full_name, phone)
       VALUES (${userId}::uuid, ${full_name ?? null}, ${phone ?? null})

@@ -26,8 +26,6 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 
-// --- ДОПОМІЖНІ ФУНКЦІЇ ---
-
 const getStatusColor = (status: string) => {
   switch (status) {
     case 'success':
@@ -51,15 +49,12 @@ export default function AdminOrdersPage() {
   const [orders, setOrders] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  // Фільтри та пошук
   const [statusFilter, setStatusFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Стейт для Sheet (бокова панель)
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState<any | null>(null);
 
-  // Стейт для редагування трекінгу
   const [trackingInput, setTrackingInput] = useState('');
   const [serviceInput, setServiceInput] = useState('');
   const [isSavingTracking, setIsSavingTracking] = useState(false);
@@ -71,9 +66,6 @@ export default function AdminOrdersPage() {
   const loadOrders = async () => {
     setLoading(true);
     try {
-      // Передаємо поточного адміна у query — server-side requireAdmin
-      // валідує по user_profiles.role або NEXT_PUBLIC_ADMIN_EMAILS.
-      // Без цього API повертає 401, бо cookie на наш origin не пишеться.
       const { user } = await authService.getCurrentUser();
       const params = new URLSearchParams();
       if (user?.id) params.set('actorUserId', user.id);
@@ -91,7 +83,6 @@ export default function AdminOrdersPage() {
     setLoading(false);
   };
 
-  // Логіка фільтрації
   const filteredOrders = useMemo(() => {
     return orders.filter((order) => {
       let matchesStatus = true;
@@ -115,7 +106,6 @@ export default function AdminOrdersPage() {
     });
   }, [orders, statusFilter, searchQuery]);
 
-  // Оновлення статусу
   const updateStatus = async (orderId: string, newStatus: string) => {
     const { user } = await authService.getCurrentUser();
     const res = await fetch('/api/admin/orders', {
@@ -141,8 +131,6 @@ export default function AdminOrdersPage() {
     }
   };
 
-  // Збереження трекінгу — у Neon-схемі цих полів немає за замовчуванням,
-  // тож просто зберігаємо їх у notes (для курсової демо).
   const saveTrackingInfo = async () => {
     if (!selectedOrder) return;
     setIsSavingTracking(true);
@@ -180,7 +168,6 @@ export default function AdminOrdersPage() {
 
       toast.success('Дані доставки збережено');
 
-      // Автоматично ставимо Shipped, якщо статус був pending/paid
       if (['pending', 'success', 'paid'].includes(selectedOrder.status)) {
         await updateStatus(selectedOrder.id, 'shipped');
       }
@@ -197,11 +184,9 @@ export default function AdminOrdersPage() {
     setIsDetailsOpen(true);
   };
 
-  // Компонент відображення оплати
   const PaymentDetails = ({ order }: { order: any }) => {
     if (!order.payment_result) return null;
 
-    // PayPal
     if (order.payment_method === 'paypal') {
       const pr = order.payment_result;
       const capture = pr.purchase_units?.[0]?.payments?.captures?.[0];
@@ -259,7 +244,6 @@ export default function AdminOrdersPage() {
       );
     }
 
-    // Інші методи (Monobank/Generic)
     return (
       <div className="bg-gray-50 dark:bg-neutral-900 p-4 rounded-xl border border-gray-200 dark:border-neutral-800 text-sm overflow-hidden">
         <h4 className="font-bold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">

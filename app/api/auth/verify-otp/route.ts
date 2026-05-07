@@ -2,17 +2,11 @@ import { NextResponse } from 'next/server';
 import { ensureUserProfile } from '@/lib/user-profile';
 import { signJwt } from '@/lib/jwt';
 
-/**
- * POST /api/auth/verify-otp { email, otp }
- *
- * Server-side proxy до Better Auth (Neon Auth) `email-otp/verify-email`.
- * Підтверджує email-адресу за 6-значним кодом, який Neon надіслав на пошту.
- */
 export async function POST(req: Request) {
   try {
     const body = await req.json();
     const email = body?.email;
-    const otp = body?.otp ?? body?.code; // мобілка шле `code`, веб — `otp`
+    const otp = body?.otp ?? body?.code; 
     if (!email || !otp) {
       return NextResponse.json({ error: 'email і otp обовʼязкові' }, { status: 400 });
     }
@@ -25,8 +19,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // Better Auth може приймати endpoint без префіксу або з /api/auth.
-    // Пробуємо обидва варіанти у порядку ймовірності.
     const candidates = [
       `${baseUrl}/email-otp/verify-email`,
       `${baseUrl}/api/auth/email-otp/verify-email`,
@@ -44,13 +36,10 @@ export async function POST(req: Request) {
       const data = await res.json().catch(() => ({}));
 
       if (res.ok) {
-        // Витягуємо user з відповіді (формат у Better Auth варіюється)
         const user = data?.user ?? data?.session?.user ?? null;
         const nameFromAuth =
           user?.name ?? user?.full_name ?? user?.user_metadata?.full_name;
 
-        // Гарантуємо рядок у user_profiles після підтвердження email.
-        // Не залежить від cookies — повертає юзеру коректний full_name.
         if (user?.id) {
           try {
             await ensureUserProfile(String(user.id), nameFromAuth);
@@ -76,7 +65,6 @@ export async function POST(req: Request) {
         });
       }
 
-      // 404 → пробуємо наступний URL; інші помилки → повертаємо
       if (res.status !== 404) {
         return NextResponse.json(
           { error: data?.message || 'Невірний код підтвердження' },

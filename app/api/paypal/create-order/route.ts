@@ -3,12 +3,6 @@ import { sql } from '@/lib/neon-db';
 import { generateAccessToken, PAYPAL_API_BASE } from '../../../lib/paypal';
 import { getBaseUrl } from '@/lib/base-url';
 
-/**
- * Створює замовлення у нашій БД (Neon) і відповідне PayPal-замовлення.
- *
- * Схема орендів спрощена для курсової: фіксована доставка $5 (flat rate).
- * Якщо потрібні країнні правила — додайте таблицю delivery_settings.
- */
 const FLAT_SHIPPING_USD = 5;
 
 interface ClientItem {
@@ -30,7 +24,6 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Відсутні обов'язкові дані" }, { status: 400 });
     }
 
-    // 1. Беремо актуальні ціни з БД (захист від маніпуляцій клієнта)
     const itemIds = items.map((i) => i.id);
     const dbProducts = await sql`
       SELECT id, price, title, images, stock FROM products
@@ -70,7 +63,6 @@ export async function POST(req: Request) {
     const shippingCost = shippingType === 'Express' ? FLAT_SHIPPING_USD * 2 : FLAT_SHIPPING_USD;
     const finalAmountUSD = calculatedTotalUSD + shippingCost;
 
-    // 2. Створюємо замовлення в Neon
     const userId = (shippingAddress.user_id as string) || null;
     const email = (shippingAddress.email as string) || '';
 
@@ -90,7 +82,6 @@ export async function POST(req: Request) {
     `;
     const orderId = Number((orderRows as Record<string, unknown>[])[0].id);
 
-    // 3. Items
     for (const item of orderItemsData) {
       await sql`
         INSERT INTO order_items (order_id, product_id, product_title, product_image, quantity, unit_price)
@@ -98,7 +89,6 @@ export async function POST(req: Request) {
       `;
     }
 
-    // 4. PayPal
     const accessToken = await generateAccessToken();
     const payload = {
       intent: 'CAPTURE',

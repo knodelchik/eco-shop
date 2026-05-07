@@ -27,17 +27,8 @@ const ALLOWED_STATUSES = new Set([
   'cancelled',
 ]);
 
-/**
- * GET   /api/admin/orders?since=ISO&limit=N&status=paid — список замовлень.
- * PATCH /api/admin/orders { id, status }                 — змінити статус.
- *
- * Обидва ендпоінти потребують прав admin (role у user_profiles або email у
- * NEXT_PUBLIC_ADMIN_EMAILS). PATCH додатково надсилає юзеру email-нотифікацію.
- */
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  // Веб-клієнт пробрасає actorUserId/actorEmail з authService.getCurrentUser()
-  // (cookie на наш origin не пишеться — бо Neon Auth на іншому домені).
   const auth = await requireAdmin({
     userId: searchParams.get('actorUserId'),
     email: searchParams.get('actorEmail'),
@@ -70,13 +61,6 @@ export async function GET(request: NextRequest) {
 
     const orders = rows as Record<string, unknown>[];
 
-    // Збагачуємо profile-info і items, нормалізуємо до форми, якої очікує
-    // app/[locale]/admin/orders/page.tsx:
-    //   - id як string (там виклик .replace/.toLowerCase)
-    //   - users: { full_name, email, phone } — підтягуємо з user_profiles
-    //   - total_amount — alias на total
-    //   - shipping_type — підтягуємо з jsonb shipping_address
-    //   - order_items: [{ image_url, price, ... }] — alias на product_image/unit_price
     const userIds = orders
       .map((o) => o.user_id)
       .filter((u): u is string => typeof u === 'string' && u.length > 0);
@@ -107,7 +91,6 @@ export async function GET(request: NextRequest) {
       return {
         ...o,
         id: String(o.id),
-        // legacy alias на total для сумісності з UI
         total_amount: Number(o.total ?? 0),
         shipping_type: shipping.shipping_type ?? 'Standard',
         users: {
@@ -127,7 +110,6 @@ export async function GET(request: NextRequest) {
           .map((i) => ({
             ...i,
             id: String(i.id),
-            // legacy aliases
             image_url: i.product_image,
             price: Number(i.unit_price ?? 0),
           })),
@@ -155,9 +137,6 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: 'id required' }, { status: 400 });
     }
 
-    // Дозволяємо оновлювати status, notes — або обидва. Note-only update
-    // використовується сторінкою для збереження трекінгу (kludge до того,
-    // як з'явиться окрема таблиця shipments).
     const hasStatus = typeof body?.status === 'string' && body.status.length > 0;
     const hasNotes = typeof body?.notes === 'string';
 
@@ -175,15 +154,12 @@ export async function PATCH(request: NextRequest) {
       );
     }
 
-    // Якщо переходимо у cancelled — треба повернути stock на склад.
-    // Робимо це ДО UPDATE статусу, щоб не плутатись з повторними cancel.
     let stockReturned = false;
     if (hasStatus && body.status === 'cancelled') {
       const prev = (await sql`
         SELECT status FROM orders WHERE id = ${id} LIMIT 1
       `) as Record<string, unknown>[];
       const prevStatus = String(prev[0]?.status ?? '');
-      // Stock повертаємо лише якщо замовлення було активне (не вже скасоване).
       if (prevStatus && prevStatus !== 'cancelled') {
         await sql`
           UPDATE products p
@@ -229,8 +205,6 @@ export async function PATCH(request: NextRequest) {
     const order = updated[0];
     const recipient = String(order.email ?? '');
 
-    // Email шлемо тільки коли реально змінили status. Note-only update —
-    // тиха операція (тільки для адміна, не повідомляємо юзера).
     if (hasStatus && transporter && recipient) {
       const status = String(body.status);
       const label = STATUS_LABELS_UK[status] ?? status;
@@ -256,8 +230,6 @@ export async function PATCH(request: NextRequest) {
         .catch((e) => console.error('order status email failed:', e));
     }
 
-    // Push на мобілку — тільки при зміні статусу. Тягнемо всі девайси юзера
-    // і викликаємо Expo Push API. Best-effort, не блокує відповідь.
     if (hasStatus && order.user_id) {
       const status = String(body.status);
       const label = STATUS_LABELS_UK[status] ?? status;

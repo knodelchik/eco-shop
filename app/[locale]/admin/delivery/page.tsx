@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import Select from 'react-select';
+import Select, { type StylesConfig } from 'react-select';
 import { Country } from 'country-state-city';
 import { Loader2, Plus, Trash2, Save } from 'lucide-react';
 import { toast } from 'sonner';
@@ -11,6 +11,58 @@ import { authHeaders } from '../../../lib/web-auth-token';
 interface CountryOption {
   value: string;
   label: string;
+}
+
+function useDarkMode() {
+  const [isDark, setIsDark] = useState(false);
+  useEffect(() => {
+    const root = document.documentElement;
+    const update = () => setIsDark(root.classList.contains('dark'));
+    update();
+    const obs = new MutationObserver(update);
+    obs.observe(root, { attributes: true, attributeFilter: ['class'] });
+    return () => obs.disconnect();
+  }, []);
+  return isDark;
+}
+
+function buildSelectStyles(isDark: boolean): StylesConfig<CountryOption, false> {
+  return {
+    control: (base, state) => ({
+      ...base,
+      minHeight: '40px',
+      background: isDark ? '#171717' : '#ffffff',
+      borderColor: state.isFocused
+        ? isDark ? '#525252' : '#9ca3af'
+        : isDark ? '#404040' : '#e5e7eb',
+      boxShadow: state.isFocused
+        ? `0 0 0 2px ${isDark ? 'rgba(64,64,64,0.5)' : 'rgba(156,163,175,0.4)'}`
+        : 'none',
+      '&:hover': { borderColor: isDark ? '#525252' : '#d1d5db' },
+    }),
+    menu: (base) => ({
+      ...base,
+      background: isDark ? '#171717' : '#ffffff',
+      border: isDark ? '1px solid #404040' : '1px solid #e5e7eb',
+      zIndex: 50,
+    }),
+    option: (base, state) => ({
+      ...base,
+      background: state.isSelected
+        ? isDark ? '#404040' : '#e5e7eb'
+        : state.isFocused
+          ? isDark ? '#262626' : '#f3f4f6'
+          : 'transparent',
+      color: isDark ? '#ffffff' : '#0a0a0a',
+      cursor: 'pointer',
+    }),
+    singleValue: (base) => ({ ...base, color: isDark ? '#ffffff' : '#0a0a0a' }),
+    input: (base) => ({ ...base, color: isDark ? '#ffffff' : '#0a0a0a' }),
+    placeholder: (base) => ({ ...base, color: isDark ? '#737373' : '#9ca3af' }),
+    indicatorSeparator: (base) => ({ ...base, background: isDark ? '#404040' : '#e5e7eb' }),
+    dropdownIndicator: (base) => ({ ...base, color: isDark ? '#a3a3a3' : '#6b7280' }),
+    clearIndicator: (base) => ({ ...base, color: isDark ? '#a3a3a3' : '#6b7280' }),
+  };
 }
 
 interface DeliveryRow {
@@ -24,12 +76,6 @@ interface DeliveryRow {
 
 const BLOCKED_COUNTRIES = new Set(['RU', 'BY']);
 
-/**
- * Адмін-сторінка налаштувань доставки.
- * Тариф визначається на рівні країни. Якщо для конкретної країни рядка
- * немає у таблиці delivery_settings — `/api/create-payment` падає на
- * flat-rate ($5 standard / $10 express).
- */
 export default function AdminDeliveryPage() {
   const [rows, setRows] = useState<DeliveryRow[]>([]);
   const [loading, setLoading] = useState(true);
@@ -38,6 +84,9 @@ export default function AdminDeliveryPage() {
   const [standardPrice, setStandardPrice] = useState('5');
   const [expressPrice, setExpressPrice] = useState('10');
   const [saving, setSaving] = useState(false);
+
+  const isDark = useDarkMode();
+  const selectStyles = useMemo(() => buildSelectStyles(isDark), [isDark]);
 
   const countryOptions = useMemo<CountryOption[]>(
     () =>
@@ -174,15 +223,7 @@ export default function AdminDeliveryPage() {
               placeholder="Знайти країну…"
               isClearable
               classNamePrefix="rs"
-              styles={{
-                control: (base) => ({
-                  ...base,
-                  minHeight: '40px',
-                  borderColor: 'rgb(229 231 235)',
-                  boxShadow: 'none',
-                }),
-                menu: (base) => ({ ...base, zIndex: 50 }),
-              }}
+              styles={selectStyles}
             />
           </div>
           <div>
