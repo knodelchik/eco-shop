@@ -23,7 +23,10 @@ import { authService } from '../../services/authService';
 import Price from '@/app/Components/Price';
 import { Product } from '@/app/types/products';
 import { ProductImage } from '@/app/Components/ProductImage';
-import { getProductImages } from '@/lib/product-image';
+import { getProductImage, getProductImages } from '@/lib/product-image';
+
+const slugifyTitle = (str: string) =>
+  str.toLowerCase().trim().replace(/[\s\W-]+/g, '-');
 
 interface ProductClientProps {
   product: Product;
@@ -56,6 +59,24 @@ export default function ProductClient({ product }: ProductClientProps) {
   const [activeTab, setActiveTab] = useState<TabId>('description');
   const [activeImageIdx, setActiveImageIdx] = useState(0);
   const galleryImages = getProductImages(product);
+  const [related, setRelated] = useState<Product[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch('/api/products')
+      .then((r) => (r.ok ? r.json() : []))
+      .then((all: Product[]) => {
+        if (cancelled) return;
+        const same = all
+          .filter((p) => p.id !== product.id && p.category === product.category)
+          .slice(0, 4);
+        setRelated(same);
+      })
+      .catch(() => setRelated([]));
+    return () => {
+      cancelled = true;
+    };
+  }, [product.id, product.category]);
   const [userId, setUserId] = useState<string | null>(null);
 
   const { addToCart, cartItems } = useCartStore();
@@ -323,7 +344,14 @@ export default function ProductClient({ product }: ProductClientProps) {
                 className="text-foreground/85 leading-relaxed"
               >
                 {activeTab === 'description' && (
-                  <p>{displayDescription || t('fallbackDescription')}</p>
+                  displayDescription ? (
+                    <div
+                      className="prose prose-sm max-w-none dark:prose-invert"
+                      dangerouslySetInnerHTML={{ __html: displayDescription }}
+                    />
+                  ) : (
+                    <p>{t('fallbackDescription')}</p>
+                  )
                 )}
                 {activeTab === 'composition' && (
                   <ul className="space-y-2 text-sm">
@@ -387,9 +415,39 @@ export default function ProductClient({ product }: ProductClientProps) {
             {tCommon('viewProducts')} <ArrowUpRight className="w-4 h-4" />
           </Link>
         </div>
-        <p className="text-muted-foreground">
-          {t('relatedComing')}
-        </p>
+        {related.length === 0 ? (
+          <p className="text-muted-foreground">{t('relatedComing')}</p>
+        ) : (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+            {related.map((p) => {
+              const title = locale === 'uk' && p.title_uk ? p.title_uk : p.title;
+              return (
+                <Link
+                  key={p.id}
+                  href={`/shop/${slugifyTitle(p.title)}`}
+                  className="group block bg-card border border-border rounded-2xl overflow-hidden hover:-translate-y-0.5 hover:shadow-lg transition-all"
+                >
+                  <div className="aspect-[4/5] relative overflow-hidden">
+                    <ProductImage
+                      src={getProductImage(p)}
+                      alt={title}
+                      category={p.category}
+                      sizes="(min-width: 768px) 25vw, 50vw"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="font-display text-base leading-tight line-clamp-2 mb-2">
+                      {title}
+                    </h3>
+                    <span className="text-base font-semibold">
+                      <Price amount={p.price} />
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
       </section>
     </div>
   );
