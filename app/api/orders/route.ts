@@ -44,6 +44,8 @@ export async function GET(request: NextRequest) {
       return {
         ...o,
         id: String(o.id),
+        // legacy alias на total для UI, що ще читає total_amount
+        total_amount: Number(o.total ?? 0),
         shipping_type: shipping.shipping_type ?? 'Standard',
         shipping_cost: Number(shipping.shipping_cost ?? 0),
         order_items: items

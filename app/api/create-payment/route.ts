@@ -88,9 +88,34 @@ export async function POST(req: Request) {
       });
     }
 
-    // Доставка — flat rate (для курсової)
-    const shippingCost =
-      shippingType === 'Express' ? FLAT_SHIPPING_USD * 2 : FLAT_SHIPPING_USD;
+    // Доставка — спочатку дивимось у delivery_settings за country_code,
+    // якщо рядка нема (або не вказано country_code) — fallback на flat-rate.
+    const countryCode = String(
+      (shippingAddress.country_code as string | undefined) ?? ''
+    ).trim().toUpperCase();
+
+    let shippingCost = shippingType === 'Express'
+      ? FLAT_SHIPPING_USD * 2
+      : FLAT_SHIPPING_USD;
+    if (countryCode) {
+      try {
+        const rows = await sql`
+          SELECT standard_price, express_price FROM delivery_settings
+          WHERE country_code = ${countryCode} LIMIT 1
+        `;
+        const row = (rows as Record<string, unknown>[])[0];
+        if (row) {
+          const std = Number(row.standard_price);
+          const exp = Number(row.express_price);
+          if (Number.isFinite(std) && Number.isFinite(exp)) {
+            shippingCost = shippingType === 'Express' ? exp : std;
+          }
+        }
+      } catch (e) {
+        // Якщо delivery_settings таблиці нема — мовчимо, fallback вже виставлений
+        console.warn('delivery_settings lookup failed, using flat-rate:', e);
+      }
+    }
     const finalAmountUSD = calculatedTotalUSD + shippingCost;
 
     // Створюємо замовлення в Neon

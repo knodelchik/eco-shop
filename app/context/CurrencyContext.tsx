@@ -70,10 +70,12 @@ export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const formatPrice = (priceInUsd: number) => {
-    let value = convertPrice(priceInUsd);
+    // Захист від undefined/null/NaN у вхідних даних — повертаємо «—»
+    // замість «NaN ₴» що ламає UI замовлень.
+    const safe = Number(priceInUsd);
+    if (!Number.isFinite(safe)) return '—';
 
-    // Якщо гривня - округлюємо до 10 (наприклад 1234 -> 1230)
-    // Якщо долар - залишаємо як є
+    let value = convertPrice(safe);
     if (currency === 'UAH') {
       value = Math.round(value / 10) * 10;
     }
@@ -82,7 +84,7 @@ export const CurrencyProvider = ({ children }: { children: ReactNode }) => {
       style: 'currency',
       currency: currency,
       currencyDisplay: 'narrowSymbol',
-      minimumFractionDigits: currency === 'UAH' ? 0 : 0, // Прибираємо копійки
+      minimumFractionDigits: currency === 'UAH' ? 0 : 0,
       maximumFractionDigits: currency === 'UAH' ? 0 : 2,
     }).format(value);
   };
