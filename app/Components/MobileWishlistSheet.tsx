@@ -23,7 +23,7 @@ const CATEGORY_BG: Record<string, string> = {
   accessories: 'linear-gradient(140deg, oklch(0.92 0.04 130) 0%, oklch(0.45 0.11 150) 130%)',
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
+ 
 type AnyItem = any;
 
 export default function MobileWishlistSheet({ isOpen, onClose }: MobileWishlistSheetProps) {

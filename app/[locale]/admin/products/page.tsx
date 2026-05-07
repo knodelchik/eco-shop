@@ -18,7 +18,7 @@ type SortConfig = {
 } | null;
 
 export default function AdminProductsPage() {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
@@ -27,7 +27,7 @@ export default function AdminProductsPage() {
   const [sortConfig, setSortConfig] = useState<SortConfig>(null);
 
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   const [editingProduct, setEditingProduct] = useState<any | null>(null);
 
   useEffect(() => {
@@ -73,7 +73,7 @@ export default function AdminProductsPage() {
     setIsSheetOpen(true);
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   const handleEdit = (product: any) => {
     setEditingProduct(product);
     setIsSheetOpen(true);

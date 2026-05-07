@@ -60,7 +60,7 @@ export default async function Image({ params }: Props) {
           padding: '20px',
         }}>
           {imageUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
+             
             <img src={imageUrl} alt={title} style={{ objectFit: 'contain', width: '100%', height: '100%' }} />
           ) : (
             <div style={{ fontSize: 80 }}>🌿</div>

@@ -21,7 +21,7 @@ export interface Order {
   total: number;
   currency: string;
   status: 'pending' | 'paid' | 'shipped' | 'delivered' | 'cancelled' | 'refunded';
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   shipping_address: any;
   payment_id: string | null;
   payment_method: string;

@@ -8,7 +8,7 @@ import RichTextEditor from '@/app/Components/RichTextEditor';
 import { cloudinaryConfigured, uploadMany } from '@/lib/cloudinary';
 
 interface ProductFormProps {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+   
   product?: any | null;
   onSaved: () => void;
   onCancel: () => void;

@@ -39,7 +39,7 @@ export default function AuthForm({ type, onSuccess, onToggleType, onForgotPasswo
 
     try {
       if (type === 'signup') {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+         
         const result = (await authService.signUp({ ...formData })) as any;
 
         // Якщо помилка містить "session" / "verify" — це означає що Better Auth

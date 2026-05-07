@@ -35,7 +35,7 @@ export default async function Image() {
         }}
       >
         {/* Логотип */}
-        {/* eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text */}
+        {/* eslint-disable-next-line jsx-a11y/alt-text */}
         <img
           // @ts-ignore
           src={iconData.buffer}
