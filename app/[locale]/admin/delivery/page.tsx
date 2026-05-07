@@ -1,11 +1,17 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
+import Select from 'react-select';
 import { Country } from 'country-state-city';
 import { Loader2, Plus, Trash2, Save } from 'lucide-react';
 import { toast } from 'sonner';
 import { authService } from '../../services/authService';
 import { authHeaders } from '../../../lib/web-auth-token';
+
+interface CountryOption {
+  value: string;
+  label: string;
+}
 
 interface DeliveryRow {
   id: number;
@@ -33,19 +39,24 @@ export default function AdminDeliveryPage() {
   const [expressPrice, setExpressPrice] = useState('10');
   const [saving, setSaving] = useState(false);
 
-  const countries = useMemo(
+  const countryOptions = useMemo<CountryOption[]>(
     () =>
       Country.getAllCountries()
         .filter((c) => !BLOCKED_COUNTRIES.has(c.isoCode))
-        .map((c) => ({ code: c.isoCode, name: c.name })),
+        .map((c) => ({ value: c.isoCode, label: `${c.flag} ${c.name} (${c.isoCode})` })),
     []
   );
 
-  const countryByCode = useMemo(() => {
+  const countryNameByCode = useMemo(() => {
     const map = new Map<string, string>();
-    countries.forEach((c) => map.set(c.code, c.name));
+    Country.getAllCountries().forEach((c) => map.set(c.isoCode, c.name));
     return map;
-  }, [countries]);
+  }, []);
+
+  const selectedCountryOption = useMemo(
+    () => countryOptions.find((o) => o.value === countryCode) ?? null,
+    [countryOptions, countryCode]
+  );
 
   const loadRows = async () => {
     setLoading(true);
@@ -90,7 +101,7 @@ export default function AdminDeliveryPage() {
         headers: { 'Content-Type': 'application/json', ...authHeaders() },
         body: JSON.stringify({
           country_code: countryCode,
-          country_name: countryByCode.get(countryCode) ?? countryCode,
+          country_name: countryNameByCode.get(countryCode) ?? countryCode,
           standard_price: std,
           express_price: exp,
           actorUserId: user?.id,
@@ -156,18 +167,23 @@ export default function AdminDeliveryPage() {
             <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">
               Країна
             </label>
-            <select
-              value={countryCode}
-              onChange={(e) => setCountryCode(e.target.value)}
-              className="w-full h-10 px-3 border border-gray-200 dark:border-neutral-700 rounded-lg bg-white dark:bg-neutral-800 text-sm outline-none focus:ring-2 focus:ring-primary"
-            >
-              <option value="">— оберіть —</option>
-              {countries.map((c) => (
-                <option key={c.code} value={c.code}>
-                  {c.name} ({c.code})
-                </option>
-              ))}
-            </select>
+            <Select
+              options={countryOptions}
+              value={selectedCountryOption}
+              onChange={(opt) => setCountryCode(opt?.value ?? '')}
+              placeholder="Знайти країну…"
+              isClearable
+              classNamePrefix="rs"
+              styles={{
+                control: (base) => ({
+                  ...base,
+                  minHeight: '40px',
+                  borderColor: 'rgb(229 231 235)',
+                  boxShadow: 'none',
+                }),
+                menu: (base) => ({ ...base, zIndex: 50 }),
+              }}
+            />
           </div>
           <div>
             <label className="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">

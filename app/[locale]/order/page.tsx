@@ -69,21 +69,40 @@ export default function OrderPage() {
           setSelectedAddressId(defaultAddr.id);
         }
       }
-      // У Neon-варіанті flat-rate доставка ($5 / Express $10) — не тягнемо нічого з БД.
-      setDeliverySettings([]);
+      // Тарифи доставки тягнемо з /api/delivery (публічний read).
+      // Якщо таблиця delivery_settings порожня або не створена — масив
+      // буде [], клієнт автоматично падає на flat-rate $5/$10.
+      try {
+        const res = await fetch('/api/delivery');
+        if (res.ok) {
+          const list = await res.json();
+          setDeliverySettings(Array.isArray(list) ? list : []);
+        } else {
+          setDeliverySettings([]);
+        }
+      } catch {
+        setDeliverySettings([]);
+      }
       setLoading(false);
     };
     initData();
   }, []);
 
   // --- Розрахунок доставки ---
+  // Шукаємо тариф для country_code з deliverySettings; якщо нема — flat-rate.
   const calculateShippingPrice = (
-    _countryCode: string,
+    countryCode: string,
     type: 'Standard' | 'Express'
-  ) => {
-    // Flat-rate (у Neon-варіанті без таблиці delivery_settings)
-    if (type === 'Express') return 10;
-    return 5;
+  ): number => {
+    const code = (countryCode ?? '').toUpperCase();
+    const row = deliverySettings.find(
+      (r) => String(r.country_code ?? '').toUpperCase() === code
+    );
+    if (row) {
+      const value = type === 'Express' ? Number(row.express_price) : Number(row.standard_price);
+      if (Number.isFinite(value)) return value;
+    }
+    return type === 'Express' ? 10 : 5;
   };
 
   useEffect(() => {
