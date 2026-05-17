@@ -1,0 +1,69 @@
+name: Uptime monitor
+
+on:
+  schedule:
+    # Запускається о 08:00 UTC кожні дві доби
+    - cron: '0 8 */2 * *'
+  workflow_dispatch:
+
+jobs:
+  ping:
+    name: Перевірка доступності ключових ендпоінтів
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Home page (/uk)
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" "https://eco-shop-psi.vercel.app/uk")
+          echo "Status: $code"
+          if [ "$code" != "200" ]; then exit 1; fi
+
+      - name: Home page (/en)
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" "https://eco-shop-psi.vercel.app/en")
+          echo "Status: $code"
+          if [ "$code" != "200" ]; then exit 1; fi
+
+      - name: Каталог /uk/shop
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" "https://eco-shop-psi.vercel.app/uk/shop")
+          echo "Status: $code"
+          if [ "$code" != "200" ]; then exit 1; fi
+
+      - name: API /api/products
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" "https://eco-shop-psi.vercel.app/api/products")
+          echo "Status: $code"
+          if [ "$code" != "200" ]; then exit 1; fi
+
+      - name: API /api/currency (НБУ rates)
+        run: |
+          body=$(curl -s "https://eco-shop-psi.vercel.app/api/currency")
+          echo "Body: $body"
+          echo "$body" | grep -q '"USD":1' || (echo "USD rate missing or wrong" && exit 1)
+          echo "$body" | grep -q '"UAH"' || (echo "UAH rate missing" && exit 1)
+          echo "$body" | grep -q '"EUR"' || (echo "EUR rate missing" && exit 1)
+
+      - name: Sitemap
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" "https://eco-shop-psi.vercel.app/sitemap.xml")
+          echo "Status: $code"
+          if [ "$code" != "200" ]; then exit 1; fi
+
+      - name: Robots.txt
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" "https://eco-shop-psi.vercel.app/robots.txt")
+          echo "Status: $code"
+          if [ "$code" != "200" ]; then exit 1; fi
+
+      - name: Favicon SVG
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" "https://eco-shop-psi.vercel.app/icon.svg")
+          echo "Status: $code"
+          if [ "$code" != "200" ]; then exit 1; fi
+
+      - name: Cloudinary hero image (мобілка)
+        run: |
+          code=$(curl -s -o /dev/null -w "%{http_code}" "https://eco-shop-psi.vercel.app/images/hero-1.jpg")
+          echo "Status: $code"
+          if [ "$code" != "200" ]; then exit 1; fi
