@@ -4,6 +4,7 @@ import { Link } from '@/navigation';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { useTranslations } from 'next-intl';
+import Image from 'next/image';
 
 export default function StorySection() {
   const tHome = useTranslations('Home');
@@ -53,10 +54,15 @@ export default function StorySection() {
             </div>
           </motion.div>
 
-          <div
-            className="md:col-span-5 relative min-h-[300px]"
-            style={{ background: 'linear-gradient(160deg, oklch(0.92 0.04 130) 0%, oklch(0.45 0.11 150) 130%)' }}
-          />
+          <div className="md:col-span-5 relative min-h-[300px] bg-muted">
+            <Image
+              src="/images/story.jpg"
+              alt=""
+              fill
+              sizes="(min-width: 768px) 40vw, 100vw"
+              className="object-cover"
+            />
+          </div>
         </div>
       </div>
     </section>

@@ -162,7 +162,7 @@ export default function ProductClient({ product }: ProductClientProps) {
           transition={{ duration: 0.5 }}
           className="lg:sticky lg:top-24 lg:self-start"
         >
-          <div className="aspect-[4/5] rounded-3xl border border-border overflow-hidden relative">
+          <div className="aspect-square sm:aspect-[4/5] max-h-[70vh] rounded-3xl border border-border overflow-hidden relative">
             <ProductImage
               src={galleryImages[activeImageIdx]}
               alt={product.title_uk || product.title}

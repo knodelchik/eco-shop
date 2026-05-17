@@ -25,8 +25,8 @@ export default function Navigation() {
 
       <div className="w-14 h-14 flex items-center justify-center">
         <Image
-          src="/logo.jpg"
-          alt="Логотип"
+          src="/logo.svg"
+          alt="EcoShop"
           width={56}
           height={56}
           className="object-contain rounded-full"

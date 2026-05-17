@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { Link } from '@/navigation';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 export default function HeroSection() {
   const t = useTranslations('Main');
@@ -48,14 +49,25 @@ export default function HeroSection() {
           transition={{ duration: 0.7, delay: 0.15 }}
         >
           <div className="grid grid-cols-2 gap-2">
-            <div
-              className="rounded-2xl aspect-[3/4]"
-              style={{ background: 'linear-gradient(160deg, oklch(0.92 0.04 130) 0%, oklch(0.78 0.14 150) 100%)' }}
-            />
-            <div
-              className="rounded-2xl aspect-[3/4] mt-8"
-              style={{ background: 'linear-gradient(200deg, oklch(0.95 0.02 100) 0%, oklch(0.45 0.11 150) 100%)' }}
-            />
+            <div className="relative rounded-2xl aspect-[3/4] overflow-hidden bg-muted">
+              <Image
+                src="/images/hero-1.jpg"
+                alt=""
+                fill
+                sizes="(min-width: 768px) 16vw, 45vw"
+                className="object-cover"
+                priority
+              />
+            </div>
+            <div className="relative rounded-2xl aspect-[3/4] mt-8 overflow-hidden bg-muted">
+              <Image
+                src="/images/hero-2.jpg"
+                alt=""
+                fill
+                sizes="(min-width: 768px) 16vw, 45vw"
+                className="object-cover"
+              />
+            </div>
           </div>
         </motion.div>
       </div>

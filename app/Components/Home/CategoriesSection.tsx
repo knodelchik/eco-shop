@@ -4,23 +4,24 @@ import { useTranslations } from 'next-intl';
 import { Link } from '@/navigation';
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
+import Image from 'next/image';
 
 const CATEGORIES = [
   {
     key: 'sharpeners',
-    bg: 'linear-gradient(160deg, oklch(0.94 0.03 110) 0%, oklch(0.78 0.14 150) 120%)',
+    img: '/images/cat-sharpeners.jpg',
     titleKey: 'titleSharpeners',
     descKey: 'descSharpeners',
   },
   {
     key: 'stones',
-    bg: 'linear-gradient(200deg, oklch(0.95 0.015 100) 0%, oklch(0.45 0.11 150) 130%)',
+    img: '/images/cat-stones.jpg',
     titleKey: 'titleGrindingStones',
     descKey: 'descGrindingStones',
   },
   {
     key: 'accessories',
-    bg: 'linear-gradient(140deg, oklch(0.92 0.04 130) 0%, oklch(0.55 0.13 150) 130%)',
+    img: '/images/cat-accessories.jpg',
     titleKey: 'titleAccessories',
     descKey: 'descAccessories',
   },
@@ -57,10 +58,16 @@ export default function CategoriesSection() {
           >
             <Link
               href={`/shop?category=${cat.key}`}
-              className="group block relative overflow-hidden rounded-2xl aspect-[4/5] border border-border transition-transform duration-500 hover:-translate-y-1"
-              style={{ background: cat.bg }}
+              className="group block relative overflow-hidden rounded-2xl aspect-[4/5] border border-border bg-muted transition-transform duration-500 hover:-translate-y-1"
             >
-              <div className="absolute inset-0 bg-gradient-to-t from-black/55 via-black/15 to-transparent" />
+              <Image
+                src={cat.img}
+                alt=""
+                fill
+                sizes="(min-width: 768px) 28vw, 100vw"
+                className="object-cover transition-transform duration-700 group-hover:scale-105"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/25 to-transparent" />
               <div className="absolute inset-0 p-6 flex flex-col justify-end text-white">
                 <h3 className="font-display text-3xl tracking-tight mb-2">
                   {t(cat.titleKey)}
