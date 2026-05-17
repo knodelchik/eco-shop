@@ -27,23 +27,27 @@ test.describe('Локалізація і валюти', () => {
     expect(body.EUR).toBeLessThan(1.5);
   });
 
-  test('переключення валюти змінює відображення ціни на головній', async ({ page }) => {
-    await page.goto('/uk');
+  test('ціни товарів у каталозі містять символ валюти', async ({ page }) => {
+    await page.goto('/uk/shop');
 
-    const heroCta = page
-      .getByRole('main')
-      .getByRole('link', { name: /магазин|shop/i })
-      .first();
-    await heroCta.click();
-    await page.waitForURL(/\/shop$/);
+    const firstArticle = page.locator('article').first();
+    await firstArticle.waitFor({ state: 'attached', timeout: 10_000 });
+    await expect(firstArticle).toBeVisible();
 
-    const firstPrice = page.locator('article').first().locator('text=/[\\d\\s.,]+(₴|\\$|€)/').first();
-    if (!(await firstPrice.count())) {
-      test.skip(true, 'Немає товарів — пропускаємо');
+    const text = await firstArticle.innerText();
+    expect(text).toMatch(/[\d.,]+\s*(₴|\$|€)/);
+  });
+
+  test('ціни товарів у мобільному API містять числа', async ({ request }) => {
+    const res = await request.get('/api/products');
+    expect(res.ok()).toBeTruthy();
+    const data = await res.json();
+    const list = Array.isArray(data) ? data : data.products ?? [];
+    if (list.length === 0) {
+      test.skip(true, 'Немає товарів у БД');
       return;
     }
-
-    const uahPrice = await firstPrice.textContent();
-    expect(uahPrice).toBeTruthy();
+    expect(typeof list[0].price).toBe('number');
+    expect(list[0].price).toBeGreaterThan(0);
   });
 });
