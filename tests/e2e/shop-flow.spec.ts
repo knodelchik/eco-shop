@@ -27,28 +27,26 @@ test.describe('Shop catalog → Product detail → Cart', () => {
 
   test('перехід на картку товару і додавання у корзину', async ({ page }) => {
     await page.goto('/shop');
-    const main = page.getByRole('main').first();
 
-    const firstCard = main.locator('article a').first();
-    if ((await firstCard.count()) === 0) {
+    const cards = page.locator('article a[href*="/shop/"]');
+    await cards.first().waitFor({ state: 'attached', timeout: 10_000 }).catch(() => {});
+    const count = await cards.count();
+    if (count === 0) {
       test.skip(true, 'No products in DB — пропускаємо');
       return;
     }
 
-    await firstCard.click();
+    await cards.first().click();
     await page.waitForURL(/\/shop\/[^/]+$/);
 
-    // На картці товару
     await expect(page.getByRole('heading').first()).toBeVisible();
 
-    // Додаємо в корзину
     const addBtn = page
       .getByRole('button', { name: /додати в корзину|add to cart/i })
       .first();
     if (await addBtn.isEnabled().catch(() => false)) {
       await addBtn.click();
 
-      // Стійкіший assert — badge корзини у Header має показати число
       await expect(
         page
           .getByRole('button', { name: /корзина|cart/i })
